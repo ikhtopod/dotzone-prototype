@@ -1,0 +1,44 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[  ]
+_global_script_class_icons={
+
+}
+
+[application]
+
+config/name="Dot Zone"
+run/main_scene="res://Maps/Demo.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="dotzone"
+config/icon="res://icon.png"
+
+[display]
+
+window/size/fullscreen=true
+window/handheld/orientation="sensor_portrait"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
+[locale]
+
+translations=PoolStringArray( "res://Translation/l18n.en.translation", "res://Translation/l18n.ru.translation" )
+locale_filter=[ 0, [ "en", "ru" ] ]
+
+[physics]
+
+3d/physics_engine="Bullet"
+
+[rendering]
+
+environment/default_environment="res://Environment/default_env.tres"
