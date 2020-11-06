@@ -1,3 +1,99 @@
-[gd_scene format=2]
+[gd_scene load_steps=5 format=2]
 
-[node name="Demo" type="Node"]
+[ext_resource path="res://UI/Default/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://Maps/Demo.gd" type="Script" id=2]
+[ext_resource path="res://Font/RobotoMono-Medium.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 72
+outline_size = 3
+outline_color = Color( 0.176471, 0.176471, 0.176471, 1 )
+use_filter = true
+font_data = ExtResource( 3 )
+
+[node name="Demo" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+margin_right = 720.0
+margin_bottom = 302.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+margin_top = 306.0
+margin_right = 720.0
+margin_bottom = 1213.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="MarginContainer4" type="MarginContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 907.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+margin_left = 36.0
+margin_right = 683.0
+margin_bottom = 907.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 20.0
+alignment = 1
+
+[node name="InformationLabel" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_left = 130.0
+margin_top = 221.0
+margin_right = 517.0
+margin_bottom = 317.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+size_flags_stretch_ratio = 3.0
+custom_fonts/font = SubResource( 1 )
+text = "Some Text"
+align = 1
+valign = 1
+
+[node name="StartButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 543.0
+margin_right = 647.0
+margin_bottom = 723.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+disabled = true
+text = "START"
+
+[node name="ExitButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_top = 727.0
+margin_right = 647.0
+margin_bottom = 907.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "EXIT"
+
+[node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+margin_left = 687.0
+margin_right = 720.0
+margin_bottom = 907.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
+margin_top = 1217.0
+margin_right = 720.0
+margin_bottom = 1520.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer/ExitButton" to="." method="_on_ExitButton_pressed"]
