@@ -20,6 +20,12 @@ run/main_scene="res://Maps/MainMenu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="dotzone"
 config/icon="res://Icon/icon.png"
+config/auto_accept_quit=false
+config/quit_on_go_back=false
+
+[autoload]
+
+TouchManager="*res://Library/Singleton/TouchManager.gd"
 
 [display]
 

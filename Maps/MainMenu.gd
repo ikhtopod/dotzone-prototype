@@ -13,7 +13,7 @@ func _on_ExitButton_pressed() -> void:
 	for scene in get_children():
 		scene.queue_free()
 	
-	yield(get_tree().create_timer(1.0, false), "timeout")
+	yield(get_tree().create_timer(0.5, false), "timeout")
 	
 	get_tree().quit()
 
