@@ -5,7 +5,9 @@ extends Node
 enum EInputEventScreenType { NONE = 0, TOUCH, DRAG }
 
 
-# Список классов-значений для класса-параметра TouchEventStatParameters
+### Список классов-значений для класса-параметра TouchEventStatParameters ###
+
+# Текущий тип прикосновения к экрану
 class CurrentTypeValue:
 	var m_value = EInputEventScreenType.NONE setget Set, Get
 	
@@ -16,6 +18,7 @@ class CurrentTypeValue:
 		m_value = value
 
 
+# The drag/touch index in the case of a multi-touch event. One index = one finger.
 class IndexValue:
 	var m_value: int = 0 setget Set, Get
 	
@@ -26,6 +29,8 @@ class IndexValue:
 		m_value = value
 
 
+# If true, the touch's state is pressed.
+# If false, the touch's state is released.
 class PressedValue:
 	var m_value: bool = 0 setget Set, Get
 	
@@ -36,7 +41,30 @@ class PressedValue:
 		m_value = value
 
 
+# The drag/touch position.
 class PositionValue:
+	var m_value: Vector2 = Vector2() setget Set, Get
+	
+	func Get() -> Vector2:
+		return m_value
+	
+	func Set(value: Vector2) -> void:
+		m_value = value
+
+
+# The drag position relative to its start position.
+class RelativeValue:
+	var m_value: Vector2 = Vector2() setget Set, Get
+	
+	func Get() -> Vector2:
+		return m_value
+	
+	func Set(value: Vector2) -> void:
+		m_value = value
+
+
+# The drag speed.
+class SpeedValue:
 	var m_value: Vector2 = Vector2() setget Set, Get
 	
 	func Get() -> Vector2:
@@ -56,6 +84,9 @@ class TouchEventStatParameters:
 	var m_pressed: PressedValue = PressedValue.new()
 	var m_position: PositionValue = PositionValue.new()
 	
+	var m_relative: RelativeValue = RelativeValue.new()
+	var m_speed: SpeedValue = SpeedValue.new()
+	
 	func SetCurrentType(currentType) -> TouchEventStatParameters:
 		m_currentType.Set(currentType)
 		return self
@@ -71,6 +102,14 @@ class TouchEventStatParameters:
 	func SetPosition(pos: Vector2) -> TouchEventStatParameters:
 		m_position.Set(pos)
 		return self
+	
+	func SetRelative(revative: Vector2) -> TouchEventStatParameters:
+		m_relative.Set(revative)
+		return self
+	
+	func SetSpeed(speed: Vector2) -> TouchEventStatParameters:
+		m_speed.Set(speed)
+		return self
 
 
 # Класс, который хранит статистику по каждому отдельному прикосновению к экрану
@@ -81,8 +120,8 @@ class TouchEventStat:
 						   TouchEventStatParameters.new()) -> void:
 		m_parameters = parameters
 	
-	func ResetCurrentType() -> void:
-		m_parameters.CurrentType().Set(EInputEventScreenType.NONE)
+	func ResetParameters() -> void:
+		m_parameters = TouchEventStatParameters.new()
 	
 	func CurrentType() -> CurrentTypeValue:
 		return m_parameters.m_currentType
@@ -95,6 +134,12 @@ class TouchEventStat:
 	
 	func Position() -> PositionValue:
 		return m_parameters.m_position
+	
+	func Relative() -> RelativeValue:
+		return m_parameters.m_relative
+	
+	func Speed() -> SpeedValue:
+		return m_parameters.m_speed
 
 
 # Класс, который хранит прикосновения к экрану,
@@ -102,7 +147,7 @@ class TouchEventStat:
 class MultiTouch:
 	const MAX_TOUCH: int = 1
 	
-	var m_touch: Array
+	var m_touch: Array = []
 	
 	func _init() -> void:
 		for index in range(MAX_TOUCH):
@@ -121,6 +166,10 @@ class MultiTouch:
 		
 		return m_touch[index]
 	
+	# Можно ли обработать прикосновение по переданному индексу
+	func CanHandleTouch(index: int) -> bool:
+		return index < Size()
+	
 	# Получить массив из данных типа TouchEventStat,
 	# значение pressed которых равно true
 	func GetOnlyPressed() -> Array:
@@ -131,6 +180,30 @@ class MultiTouch:
 				result.push_back(touch)
 		
 		return result
+	
+	func __GetSome_EInputEventScreenType(type) -> Array:
+		var result: Array = []
+		
+		for touch in m_touch:
+			if touch.CurrentType().Get() == type:
+				result.push_back(touch)
+		
+		return result
+	
+	# Получить массив из данных типа TouchEventStat,
+	# значение CurrentType которых не равно EInputEventScreenType.NONE
+	func GetOnlyNONE() -> Array:
+		return __GetSome_EInputEventScreenType(EInputEventScreenType.NONE)
+
+	# Получить массив из данных типа TouchEventStat,
+	# значение CurrentType которых не равно EInputEventScreenType.TOUCH
+	func GetOnlyTOUCH() -> Array:
+		return __GetSome_EInputEventScreenType(EInputEventScreenType.TOUCH)
+
+	# Получить массив из данных типа TouchEventStat,
+	# значение CurrentType которых не равно EInputEventScreenType.DRAG
+	func GetOnlyDRAG() -> Array:
+		return __GetSome_EInputEventScreenType(EInputEventScreenType.DRAG)
 
 
 """ ### Global variables ### """
@@ -142,16 +215,22 @@ onready var current_touch := MultiTouch.new()
 
 func _input(event):
 	if event is InputEventScreenTouch:
-		if (event.index < current_touch.Size()):
-			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
-			
-			if (event.is_pressed()):
-				current_touch.At(event.index).Pressed().Set(true)
-				current_touch.At(event.index).Position().Set(event.position)
-			else:
-				current_touch.At(event.index).Pressed().Set(false)
-				current_touch.At(event.index).Position().Set(event.position)
+		if (current_touch.CanHandleTouch(event.index)):
+			match current_touch.At(event.index).CurrentType().Get():
+				EInputEventScreenType.DRAG:
+					#current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.NONE)
+					current_touch.At(event.index).ResetParameters()
+				_:
+					current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
+					current_touch.At(event.index).Position().Set(event.position)
+					current_touch.At(event.index).Pressed().Set(event.is_pressed())
+					current_touch.At(event.index).Relative().Set(Vector2())
+					current_touch.At(event.index).Speed().Set(Vector2())
 	elif event is InputEventScreenDrag:
-		if (event.index < current_touch.Size()):
+		if (current_touch.CanHandleTouch(event.index)):
 			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.DRAG)
 			current_touch.At(event.index).Position().Set(event.position)
+			current_touch.At(event.index).Pressed().Set(true)
+			current_touch.At(event.index).Relative().Set(event.relative)
+			current_touch.At(event.index).Speed().Set(event.speed)
+

@@ -19,18 +19,50 @@ script = ExtResource( 3 )
 [node name="Node2DTest" type="Node2D" parent="."]
 
 [node name="icon" type="Sprite" parent="Node2DTest"]
-position = Vector2( 60.9048, 62.1119 )
+position = Vector2( -924.626, 62.1119 )
 texture = ExtResource( 2 )
 
 [node name="icon2" type="Sprite" parent="Node2DTest"]
-position = Vector2( 654.099, 62.1119 )
+position = Vector2( -331.432, 62.1119 )
 texture = ExtResource( 2 )
 
 [node name="icon3" type="Sprite" parent="Node2DTest"]
-position = Vector2( 60.9048, 1218.02 )
+position = Vector2( -924.626, 1218.02 )
 texture = ExtResource( 2 )
 
 [node name="icon4" type="Sprite" parent="Node2DTest"]
-position = Vector2( 654.099, 1218.02 )
+position = Vector2( -331.432, 1218.02 )
+texture = ExtResource( 2 )
+
+[node name="icon5" type="Sprite" parent="Node2DTest"]
+position = Vector2( 269.447, 62.1119 )
+texture = ExtResource( 2 )
+
+[node name="icon6" type="Sprite" parent="Node2DTest"]
+position = Vector2( 862.641, 62.1119 )
+texture = ExtResource( 2 )
+
+[node name="icon7" type="Sprite" parent="Node2DTest"]
+position = Vector2( 269.447, 1218.02 )
+texture = ExtResource( 2 )
+
+[node name="icon8" type="Sprite" parent="Node2DTest"]
+position = Vector2( 862.641, 1218.02 )
+texture = ExtResource( 2 )
+
+[node name="icon9" type="Sprite" parent="Node2DTest"]
+position = Vector2( -924.626, -1107.72 )
+texture = ExtResource( 2 )
+
+[node name="icon10" type="Sprite" parent="Node2DTest"]
+position = Vector2( -331.432, -1107.72 )
+texture = ExtResource( 2 )
+
+[node name="icon11" type="Sprite" parent="Node2DTest"]
+position = Vector2( 269.447, -1107.72 )
+texture = ExtResource( 2 )
+
+[node name="icon12" type="Sprite" parent="Node2DTest"]
+position = Vector2( 862.641, -1107.72 )
 texture = ExtResource( 2 )
 [connection signal="moved" from="MainCameraTarget" to="MainCamera" method="_on_MainCameraTarget_moved"]
