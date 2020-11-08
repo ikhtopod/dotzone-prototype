@@ -82,7 +82,7 @@ class TouchEventStat:
 		m_parameters = parameters
 	
 	func ResetCurrentType() -> void:
-		m_parameters.SetCurrentType(EInputEventScreenType.NONE)
+		m_parameters.CurrentType().Set(EInputEventScreenType.NONE)
 	
 	func CurrentType() -> CurrentTypeValue:
 		return m_parameters.m_currentType
