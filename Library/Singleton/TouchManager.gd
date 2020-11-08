@@ -1,65 +1,100 @@
 extends Node
 
 
+# Тип взаимодействия с экраном
 enum EInputEventScreenType { NONE = 0, TOUCH, DRAG }
 
 
-class TouchEventStatParameters:
-	var m_currentType = EInputEventScreenType.NONE
+# Список классов-значений для класса-параметра TouchEventStatParameters
+class CurrentTypeValue:
+	var m_value = EInputEventScreenType.NONE setget Set, Get
 	
-	var m_index: int = 0
-	var m_pressed: bool = false
-	var m_position: Vector2 = Vector2()
+	func Get():
+		return m_value
+	
+	func Set(value) -> void:
+		m_value = value
+
+
+class IndexValue:
+	var m_value: int = 0 setget Set, Get
+	
+	func Get() -> int:
+		return m_value
+	
+	func Set(value: int) -> void:
+		m_value = value
+
+
+class PressedValue:
+	var m_value: bool = 0 setget Set, Get
+	
+	func Get() -> bool:
+		return m_value
+	
+	func Set(value: bool) -> void:
+		m_value = value
+
+
+class PositionValue:
+	var m_value: Vector2 = Vector2() setget Set, Get
+	
+	func Get() -> Vector2:
+		return m_value
+	
+	func Set(value: Vector2) -> void:
+		m_value = value
+
+
+# Класс-параметр со списком значений для класса TouchEventStat.
+# Методы этого класса используются для генерации объекта TouchEventStatParameters
+# перед созданием объекта TouchEventStat
+class TouchEventStatParameters:
+	var m_currentType: CurrentTypeValue = CurrentTypeValue.new()
+	
+	var m_index: IndexValue = IndexValue.new()
+	var m_pressed: PressedValue = PressedValue.new()
+	var m_position: PositionValue = PositionValue.new()
 	
 	func SetCurrentType(currentType) -> TouchEventStatParameters:
-		m_currentType = currentType
+		m_currentType.Set(currentType)
 		return self
 	
 	func SetIndex(index: int) -> TouchEventStatParameters:
-		m_index = index
+		m_index.Set(index)
 		return self
 	
 	func SetPressed(pressed: bool) -> TouchEventStatParameters:
-		m_pressed = pressed
+		m_pressed.Set(pressed)
 		return self
 	
-	func SetPosition(position: Vector2) -> TouchEventStatParameters:
-		m_position = position
+	func SetPosition(pos: Vector2) -> TouchEventStatParameters:
+		m_position.Set(pos)
 		return self
 
 
+# Класс, который хранит статистику по каждому отдельному прикосновению к экрану
 class TouchEventStat:
 	var m_parameters: TouchEventStatParameters = null
 	
-	func _init(parameters: TouchEventStatParameters) -> void:
+	func _init(parameters: TouchEventStatParameters = \
+						   TouchEventStatParameters.new()) -> void:
 		m_parameters = parameters
 	
-	func GetCurrentType():
-		return m_parameters.m_currentType
-	
-	func SetCurrentType(newType) -> void:
-		m_parameters.SetCurrentType(newType)
-		
 	func ResetCurrentType() -> void:
 		m_parameters.SetCurrentType(EInputEventScreenType.NONE)
 	
-	func GetIndex() -> int:
+	func CurrentType() -> CurrentTypeValue:
+		return m_parameters.m_currentType
+	
+	func Index() -> IndexValue:
 		return m_parameters.m_index
 	
-	func SetIndex(index: int) -> void:
-		m_parameters.SetIndex(index)
-	
-	func IsPressed() -> bool:
+	func Pressed() -> PressedValue:
 		return m_parameters.m_pressed
 	
-	func SetPressed(pressed: bool) -> void:
-		m_parameters.SetPressed(pressed)
-	
-	func GetPosition() -> Vector2:
+	func Position() -> PositionValue:
 		return m_parameters.m_position
-	
-	func SetPosition(position: Vector2) -> void:
-		m_parameters.SetPosition(position)
 
 
 # Класс, который хранит прикосновения к экрану,
@@ -92,7 +127,7 @@ class MultiTouch:
 		var result: Array = []
 		
 		for touch in m_touch:
-			if touch.IsPressed():
+			if touch.Pressed().Get():
 				result.push_back(touch)
 		
 		return result
@@ -108,15 +143,15 @@ onready var current_touch := MultiTouch.new()
 func _input(event):
 	if event is InputEventScreenTouch:
 		if (event.index < current_touch.Size()):
-			current_touch.At(event.index).SetCurrentType(EInputEventScreenType.TOUCH)
+			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
 			
 			if (event.is_pressed()):
-				current_touch.At(event.index).SetPressed(true)
-				current_touch.At(event.index).SetPosition(event.position)
+				current_touch.At(event.index).Pressed().Set(true)
+				current_touch.At(event.index).Position().Set(event.position)
 			else:
-				current_touch.At(event.index).SetPressed(false)
-				current_touch.At(event.index).SetPosition(event.position)
+				current_touch.At(event.index).Pressed().Set(false)
+				current_touch.At(event.index).Position().Set(event.position)
 	elif event is InputEventScreenDrag:
 		if (event.index < current_touch.Size()):
-			current_touch.At(event.index).SetCurrentType(EInputEventScreenType.DRAG)
-			current_touch.At(event.index).SetPosition(event.position)
+			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.DRAG)
+			current_touch.At(event.index).Position().Set(event.position)
