@@ -145,12 +145,23 @@ class TouchEventStat:
 # Класс, который хранит прикосновения к экрану,
 # а также, ограничивает количество прикосновений
 class MultiTouch:
-	const MAX_TOUCH: int = 1
+	const DEFAULT_MAX_TOUCH: int = 10
+	var m_currentMaxTouch: int = DEFAULT_MAX_TOUCH setget SetCurrentMaxTouch
 	
 	var m_touch: Array = []
 	
-	func _init() -> void:
-		for index in range(MAX_TOUCH):
+	func _init(maxTouch: int = 0) -> void:
+		SetCurrentMaxTouch(maxTouch)
+		InitTouch()
+	
+	# Изменить значение поля m_currentMaxTouch с учетном ограничений
+	func SetCurrentMaxTouch(maxTouch: int) -> void:
+		if maxTouch > 0 and maxTouch < DEFAULT_MAX_TOUCH:
+			m_currentMaxTouch = maxTouch
+	
+	# Инициализация поля m_touch
+	func InitTouch() -> void:
+		for index in range(m_currentMaxTouch):
 			var tmpParams: TouchEventStatParameters = \
 				TouchEventStatParameters.new().SetIndex(index)
 			m_touch.push_back(TouchEventStat.new(tmpParams))
@@ -161,7 +172,7 @@ class MultiTouch:
 	
 	# Получить TouchEventStat по индексу
 	func At(var index: int) -> TouchEventStat:
-		if index < 0 or index >= self.Size():
+		if index < 0 or not CanHandleTouch(index):
 			return null
 		
 		return m_touch[index]
@@ -181,7 +192,9 @@ class MultiTouch:
 		
 		return result
 	
-	func __GetSome_EInputEventScreenType(type) -> Array:
+	# Вспомогательная функция для функций начинающихся с 
+	# префикса GetOnly***()
+	func __GetSomeByEInputEventScreenType(type) -> Array:
 		var result: Array = []
 		
 		for touch in m_touch:
@@ -191,24 +204,45 @@ class MultiTouch:
 		return result
 	
 	# Получить массив из данных типа TouchEventStat,
-	# значение CurrentType которых не равно EInputEventScreenType.NONE
+	# значение CurrentType которых равно EInputEventScreenType.NONE
 	func GetOnlyNONE() -> Array:
-		return __GetSome_EInputEventScreenType(EInputEventScreenType.NONE)
+		return __GetSomeByEInputEventScreenType(EInputEventScreenType.NONE)
 
 	# Получить массив из данных типа TouchEventStat,
-	# значение CurrentType которых не равно EInputEventScreenType.TOUCH
+	# значение CurrentType которых равно EInputEventScreenType.TOUCH
 	func GetOnlyTOUCH() -> Array:
-		return __GetSome_EInputEventScreenType(EInputEventScreenType.TOUCH)
+		return __GetSomeByEInputEventScreenType(EInputEventScreenType.TOUCH)
 
 	# Получить массив из данных типа TouchEventStat,
-	# значение CurrentType которых не равно EInputEventScreenType.DRAG
+	# значение CurrentType которых равно EInputEventScreenType.DRAG
 	func GetOnlyDRAG() -> Array:
-		return __GetSome_EInputEventScreenType(EInputEventScreenType.DRAG)
+		return __GetSomeByEInputEventScreenType(EInputEventScreenType.DRAG)
+	
+	# Вспомогательная функция для функций начинающихся с 
+	# префикса GetFirst***()
+	func __GetFirstByEInputEventScreenType(type) -> TouchEventStat:
+		for touch in m_touch:
+			if touch.CurrentType().Get() == type:
+				return touch
+		
+		return null
+	
+	# Получить первый объект типа TouchEventStat,
+	# значение CurrentType которого равно EInputEventScreenType.TOUCH
+	# Если таких объектов нет, то вернуть null
+	func GetFirstTOUCH() -> TouchEventStat:
+		return __GetFirstByEInputEventScreenType(EInputEventScreenType.TOUCH)
+
+	# Получить первый объект типа TouchEventStat,
+	# значение CurrentType которого равно EInputEventScreenType.DRAG
+	# Если таких объектов нет, то вернуть null
+	func GetFirstDRAG() -> TouchEventStat:
+		return __GetFirstByEInputEventScreenType(EInputEventScreenType.DRAG)
 
 
 """ ### Global variables ### """
 
-onready var current_touch := MultiTouch.new()
+onready var current_touch := MultiTouch.new(1)
 
 
 """ ### Godot events ### """
@@ -218,7 +252,6 @@ func _input(event):
 		if (current_touch.CanHandleTouch(event.index)):
 			match current_touch.At(event.index).CurrentType().Get():
 				EInputEventScreenType.DRAG:
-					#current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.NONE)
 					current_touch.At(event.index).ResetParameters()
 				_:
 					current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
