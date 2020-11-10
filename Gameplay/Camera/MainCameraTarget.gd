@@ -24,9 +24,11 @@ func _process(delta):
 	var touch = TouchManager.current_touch.GetFirstDRAG()
 	
 	if touch:
-		if SpeedIsUsing(touch):
-			position -= GetSpeedOffsetPosition(delta, touch)
-		else:
-			position -= GetRelativeOffsetPosition(touch)
-			
+		#if SpeedIsUsing(touch):
+		#	position -= GetSpeedOffsetPosition(delta, touch)
+		#else:
+		#	position -= GetRelativeOffsetPosition(touch)
+		
+		position -= GetRelativeOffsetPosition(touch)
+		
 		emit_signal("moved")
