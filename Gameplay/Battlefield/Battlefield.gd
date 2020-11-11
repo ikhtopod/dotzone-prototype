@@ -1,6 +1,7 @@
 extends Node2D
 
 const Dot = preload("res://Gameplay/Dot/Dot.tscn")
+const LinkedList = preload("res://Library/Collection/LinkedList.gd")
 
 
 const DEFAULT_FIELD_SIZE: float = 1.0
@@ -23,6 +24,12 @@ var m_field: Array = [] setget ,GetField
 func GetField() -> Array:
 	return m_field
 
+# Очистить поле
+func ClearField() -> void:
+	for arr in m_field:
+		arr.clear()
+	m_field.clear()
+
 # Инициализировать m_field в соответствии с m_fieldSize, если поле еще не инициализировано
 func InitFieldByFieldSize() -> void:
 	if not m_field.empty():
@@ -41,12 +48,16 @@ func Generate() -> void:
 	if not m_field.empty():
 		return
 	
-	SetFieldSize(Vector2(50, 50))
+	SetFieldSize(Vector2(100, 100))
 	InitFieldByFieldSize()
 
 
 func _enter_tree():
 	Generate()
+
+
+func _exit_tree():
+	ClearField()
 
 
 func _ready():

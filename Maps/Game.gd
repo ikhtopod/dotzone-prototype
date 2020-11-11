@@ -12,6 +12,12 @@ func _ready():
 	pass
 
 
+func _input(event):
+	if event is InputEventKey:
+		if event.pressed and event.scancode == KEY_BACKSPACE:
+			goto_main_menu()
+
+
 func _notification(what):
 	""" Нажатие на клавишу Back """
 	# For Android
