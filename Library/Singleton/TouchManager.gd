@@ -1,6 +1,17 @@
 extends Node
 
 
+# Реакция на InputEventScreenDrag
+# index - номер прикосновения
+# touch - объект типа TouchEventStat
+signal drag(index, touch)
+
+# Реакция на InputEventScreenTouch
+# index - номер прикосновения
+# touch - объект типа TouchEventStat
+signal touch(index, touch)
+
+
 # Тип взаимодействия с экраном
 enum EInputEventScreenType { NONE = 0, TOUCH, DRAG }
 
@@ -250,15 +261,15 @@ onready var current_touch := MultiTouch.new(1)
 func _input(event):
 	if event is InputEventScreenTouch:
 		if (current_touch.CanHandleTouch(event.index)):
-			match current_touch.At(event.index).CurrentType().Get():
-				EInputEventScreenType.DRAG:
-					current_touch.At(event.index).ResetParameters()
-				_:
-					current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
-					current_touch.At(event.index).Position().Set(event.position)
-					current_touch.At(event.index).Pressed().Set(event.is_pressed())
-					current_touch.At(event.index).Relative().Set(Vector2())
-					current_touch.At(event.index).Speed().Set(Vector2())
+			if current_touch.At(event.index).CurrentType().Get() == EInputEventScreenType.DRAG:
+				current_touch.At(event.index).ResetParameters()
+			else:
+				current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
+				current_touch.At(event.index).Position().Set(event.position)
+				current_touch.At(event.index).Pressed().Set(event.is_pressed())
+				current_touch.At(event.index).Relative().Set(Vector2())
+				current_touch.At(event.index).Speed().Set(Vector2())
+				emit_signal("touch", event.index, current_touch.At(event.index))
 	elif event is InputEventScreenDrag:
 		if (current_touch.CanHandleTouch(event.index)):
 			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.DRAG)
@@ -266,4 +277,5 @@ func _input(event):
 			current_touch.At(event.index).Pressed().Set(true)
 			current_touch.At(event.index).Relative().Set(event.relative)
 			current_touch.At(event.index).Speed().Set(event.speed)
+			emit_signal("drag", event.index, current_touch.At(event.index))
 

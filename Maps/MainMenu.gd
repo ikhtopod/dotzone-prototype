@@ -5,7 +5,8 @@ onready var gameScene: String = "res://Maps/Game.tscn"
 
 func _ready():
 	var screenSize: Vector2 = get_viewport_rect().size
-	var informationLabel: Node = $"CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer/InformationLabel" as Node
+	var informationLabel: Node = \
+		$"CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer/InformationLabel" as Node
 	informationLabel.text = str(screenSize.x) + "x" + str(screenSize.y)
 
 
