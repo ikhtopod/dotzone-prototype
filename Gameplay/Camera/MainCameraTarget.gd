@@ -28,5 +28,7 @@ func _on_MainCameraTarget_drag(index: int, touch: TouchManager.TouchEventStat) -
 	if !touch:
 		return
 	
+	print_debug("Index touch: " + str(index))
+	
 	RelativePositionOffset(touch)
 	emit_signal("moved")
