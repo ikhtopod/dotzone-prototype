@@ -253,7 +253,8 @@ class MultiTouch:
 
 """ ### Global variables ### """
 
-onready var current_touch := MultiTouch.new(1)
+const MAX_NUMBER_TOUCH: int = 1
+onready var current_touch := MultiTouch.new(MAX_NUMBER_TOUCH)
 
 
 """ ### Godot events ### """

@@ -25,6 +25,8 @@ config/quit_on_go_back=false
 
 [autoload]
 
+GameManager="*res://Library/Singleton/GameManager.gd"
+PlayerManager="*res://Library/Singleton/PlayerManager.gd"
 TouchManager="*res://Library/Singleton/TouchManager.gd"
 
 [display]
