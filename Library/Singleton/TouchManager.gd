@@ -259,19 +259,29 @@ onready var current_touch := MultiTouch.new(MAX_NUMBER_TOUCH)
 
 """ ### Godot events ### """
 
+func IsCorrectTouchEvent(event: InputEvent) -> bool:
+	return event is InputEventScreenTouch and \
+		   not event.is_pressed() and \
+		   current_touch.CanHandleTouch(event.index)
+
+
+func IsCorrectDragEvent(event: InputEvent) -> bool:
+	return event is InputEventScreenDrag
+
+
 func _input(event):
-	if event is InputEventScreenTouch:
-		if (current_touch.CanHandleTouch(event.index)):
-			if current_touch.At(event.index).CurrentType().Get() == EInputEventScreenType.DRAG:
-				current_touch.At(event.index).ResetParameters()
-			else:
-				current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
-				current_touch.At(event.index).Position().Set(event.position)
-				current_touch.At(event.index).Pressed().Set(event.is_pressed())
-				current_touch.At(event.index).Relative().Set(Vector2())
-				current_touch.At(event.index).Speed().Set(Vector2())
-				emit_signal("touch", event.index, current_touch.At(event.index))
-	elif event is InputEventScreenDrag:
+	if IsCorrectTouchEvent(event):
+		if current_touch.At(event.index).CurrentType().Get() == EInputEventScreenType.DRAG:
+			current_touch.At(event.index).ResetParameters()
+		else:
+			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.TOUCH)
+			current_touch.At(event.index).Position().Set(event.position)
+			current_touch.At(event.index).Pressed().Set(event.is_pressed())
+			current_touch.At(event.index).Relative().Set(Vector2())
+			current_touch.At(event.index).Speed().Set(Vector2())
+			emit_signal("touch", event.index, current_touch.At(event.index))
+			get_tree().set_input_as_handled()
+	elif IsCorrectDragEvent(event):
 		if (current_touch.CanHandleTouch(event.index)):
 			current_touch.At(event.index).CurrentType().Set(EInputEventScreenType.DRAG)
 			current_touch.At(event.index).Position().Set(event.position)
@@ -279,4 +289,6 @@ func _input(event):
 			current_touch.At(event.index).Relative().Set(event.relative)
 			current_touch.At(event.index).Speed().Set(event.speed)
 			emit_signal("drag", event.index, current_touch.At(event.index))
+		else:
+			get_tree().set_input_as_handled()
 
