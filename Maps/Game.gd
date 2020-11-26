@@ -41,5 +41,6 @@ func goto_main_menu():
 # Реакция на прикосновение пальца к экрану
 func _TouchReaction(index, touch: TouchManager.TouchEventStat):
 	var finger_touch = FingerTouch.instance()
-	finger_touch.position = touch.Position().Get() + mainCameraTarget.position
+	finger_touch.position = \
+		touch.Position().Get() + mainCamera.position - (get_viewport_rect().size / 2.0)
 	add_child(finger_touch)

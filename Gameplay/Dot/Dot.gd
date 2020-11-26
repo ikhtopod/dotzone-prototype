@@ -28,3 +28,4 @@ func _on_Area2D_area_entered(area: Area2D):
 	
 	var printer_node: Label = printer_nodes.front() as Label
 	printer_node.text = name
+
