@@ -3,13 +3,15 @@ extends Node2D
 
 onready var mainMenuScene: String = "res://Maps/MainMenu.tscn"
 
-onready var mainCameraTarget := $MainCameraTarget
-onready var mainCamera := $MainCamera
+onready var mainCameraTarget := $CameraManager/MainCameraTarget
+onready var mainCamera := $CameraManager/MainCamera
 onready var battlefield := $Battlefield
+
+const FingerTouch = preload("res://Gameplay/FingerTouch/FingerTouch.tscn")
 
 
 func _ready():
-	pass
+	TouchManager.connect("touch", self, "_TouchReaction")
 
 
 func _input(event):
@@ -34,3 +36,10 @@ func goto_main_menu():
 	
 	if result != OK:
 		printerr("Error: can't change scene to " + mainMenuScene)
+
+
+# Реакция на прикосновение пальца к экрану
+func _TouchReaction(index, touch: TouchManager.TouchEventStat):
+	var finger_touch = FingerTouch.instance()
+	finger_touch.position = touch.Position().Get() + mainCameraTarget.position
+	add_child(finger_touch)

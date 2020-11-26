@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Gameplay/Camera/MainCameraTarget.gd" type="Script" id=1]
+[ext_resource path="res://Gameplay/Camera/MainCamera.gd" type="Script" id=2]
+
+[node name="CameraManager" type="Node2D"]
+
+[node name="MainCameraTarget" type="Position2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="MainCamera" type="Camera2D" parent="."]
+current = true
+smoothing_enabled = true
+smoothing_speed = 10.0
+script = ExtResource( 2 )
+[connection signal="moved" from="MainCameraTarget" to="MainCamera" method="_on_MainCameraTarget_moved"]
