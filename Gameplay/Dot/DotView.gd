@@ -1,4 +1,12 @@
-extends Dot
+extends Node2D
+
+# Класс, отображающий интерфейс точки, в зависимости от ее текущего состояния.
+# Шаблон MVC:
+#     Model: DotStructure
+#     View: DotView
+#     Controller:
+#         View to Model: DotView->ToucnManager->DotStructure
+#         Model to View: DotStructure->DotView
 
 
 func _on_Area2D_area_entered(area: Area2D):

@@ -9,10 +9,15 @@
 config_version=4
 
 _global_script_classes=[ {
-"base": "Node2D",
+"base": "Resource",
 "class": "Dot",
 "language": "GDScript",
 "path": "res://Gameplay/Dot/Dot.gd"
+}, {
+"base": "Resource",
+"class": "DotStructure",
+"language": "GDScript",
+"path": "res://Gameplay/Dot/DotStructure.gd"
 }, {
 "base": "Reference",
 "class": "LinkedList",
@@ -21,6 +26,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "Dot": "",
+"DotStructure": "",
 "LinkedList": ""
 }
 

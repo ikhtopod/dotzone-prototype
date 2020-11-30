@@ -1,5 +1,12 @@
 extends Node
 
+# Шаблон MVC:
+#     Model: DotStructure
+#     View: DotView
+#     Controller:
+#         View to Model: DotView->ToucnManager->DotStructure
+#         Model to View: DotStructure->DotView
+
 
 # Реакция на InputEventScreenDrag
 # index - номер прикосновения

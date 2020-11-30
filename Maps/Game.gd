@@ -39,7 +39,7 @@ func goto_main_menu():
 
 
 # Реакция на прикосновение пальца к экрану
-func _TouchReaction(index, touch: TouchManager.TouchEventStat):
+func _TouchReaction(index: int, touch: TouchManager.TouchEventStat):
 	var finger_touch = FingerTouchScene.instance()
 	finger_touch.position = \
 		touch.Position().Get() + mainCameraNode.position - (get_viewport_rect().size / 2.0)
