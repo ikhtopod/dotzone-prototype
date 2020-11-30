@@ -1,5 +1,13 @@
 extends Node2D
 
+# Шаблон MVC:
+#     Model: DotStructure
+#     View: DotView
+#     Controller:
+#         View to Model: DotView->ToucnManager->DotStructure
+#         Model to View: DotStructure->DotView
+
+
 const DotViewScene = preload("res://Gameplay/Dot/DotView.tscn")
 
 
