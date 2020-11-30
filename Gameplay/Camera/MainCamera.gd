@@ -1,7 +1,7 @@
 extends Camera2D
 
 
-onready var mainCameraTarget: Node = $"../MainCameraTarget"
+onready var mainCameraTargetNode: Node = $"../MainCameraTarget"
 
 func _on_MainCameraTarget_moved() -> void:
-	position = mainCameraTarget.position
+	position = mainCameraTargetNode.position

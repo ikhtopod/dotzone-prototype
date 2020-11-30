@@ -1,5 +1,7 @@
 extends Reference
 
+class_name LinkedList
+
 
 class LinkedListItem extends Reference:
 	var m_next = null

@@ -1,7 +1,6 @@
 extends Node2D
 
-const Dot = preload("res://Gameplay/Dot/Dot.tscn")
-const LinkedList = preload("res://Library/Collection/LinkedList.gd")
+const DotViewScene = preload("res://Gameplay/Dot/DotView.tscn")
 
 
 const DEFAULT_FIELD_SIZE: float = 1.0
@@ -38,7 +37,7 @@ func InitFieldByFieldSize() -> void:
 	for w in range(m_fieldSize.x):
 		m_field.push_back([])
 		for h in range(m_fieldSize.y):
-			m_field.back().push_back(Dot.instance())
+			m_field.back().push_back(DotViewScene.instance())
 			m_field.back().back().position = Vector2(w * 128.0, h * 128.0)
 			add_child(m_field.back().back())
 

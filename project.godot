@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "Dot",
+"language": "GDScript",
+"path": "res://Gameplay/Dot/Dot.gd"
+}, {
+"base": "Reference",
+"class": "LinkedList",
+"language": "GDScript",
+"path": "res://Library/Collection/LinkedList.gd"
+} ]
 _global_script_class_icons={
-
+"Dot": "",
+"LinkedList": ""
 }
 
 [application]
@@ -31,8 +42,8 @@ TouchManager="*res://Library/Singleton/TouchManager.gd"
 
 [display]
 
-window/size/width=720
-window/size/height=1520
+window/size/width=768
+window/size/height=1366
 window/size/fullscreen=true
 window/handheld/orientation="sensor_portrait"
 window/stretch/mode="2d"

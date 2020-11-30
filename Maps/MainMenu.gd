@@ -1,7 +1,7 @@
 extends Node2D
 
 
-onready var gameScene: String = "res://Maps/Game.tscn"
+onready var gameSceneName: String = "res://Maps/Game.tscn"
 
 func _ready():
 	var screenSize: Vector2 = get_viewport_rect().size
@@ -15,10 +15,10 @@ func _on_ExitButton_pressed():
 
 
 func _on_StartButton_pressed():
-	var res := get_tree().change_scene(gameScene)
+	var res := get_tree().change_scene(gameSceneName)
 	
 	if res != OK:
-		printerr("Can't change scene to " + gameScene)
+		printerr("Can't change scene to " + gameSceneName)
 
 
 func _notification(what):
