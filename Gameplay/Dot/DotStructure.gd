@@ -14,7 +14,7 @@ class_name DotStructure
 
 # Класс для создания соседних точек
 class NeighboursGenerator extends Resource:
-	const MAXCOORD: float = 20.0
+	const MAXCOORD: float = 50.0
 	
 	var m_queue: Array = []
 	var m_neighbour: Dot = null
