@@ -38,6 +38,10 @@ class DotNeighbours extends Resource:
 
 	func GetNeighbours() -> Array:
 		return m_neighbours.duplicate(false)
+		#return m_neighbours
+	
+	func Clear() -> void:
+		m_neighbours.clear()
 	
 	### North ###
 
@@ -50,7 +54,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.N] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно N
-	func OppositeN() -> Dot:
+	func GetOppositeN() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.N]
 
 	# Изменить соседний объект по направлению противоположному относительно N
@@ -68,7 +72,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.S] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно S
-	func OppositeS() -> Dot:
+	func GetOppositeS() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.S]
 
 	# Изменить соседний объект по направлению противоположному относительно S
@@ -86,7 +90,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.W] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно W
-	func OppositeW() -> Dot:
+	func GetOppositeW() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.W]
 
 	# Изменить соседний объект по направлению противоположному относительно W
@@ -104,7 +108,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.E] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно E
-	func OppositeE() -> Dot:
+	func GetOppositeE() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.E]
 
 	# Изменить соседний объект по направлению противоположному относительно E
@@ -122,7 +126,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.NW] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно NW
-	func OppositeNW() -> Dot:
+	func GetOppositeNW() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.NW]
 
 	# Изменить соседний объект по направлению противоположному относительно NW
@@ -140,7 +144,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.NE] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно NE
-	func OppositeNE() -> Dot:
+	func GetOppositeNE() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.NE]
 
 	# Изменить соседний объект по направлению противоположному относительно NE
@@ -158,7 +162,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.SW] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно SW
-	func OppositeSW() -> Dot:
+	func GetOppositeSW() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.SW]
 
 	# Изменить соседний объект по направлению противоположному относительно SW
@@ -176,7 +180,7 @@ class DotNeighbours extends Resource:
 		m_neighbours[ECardinalPoints.SE] = neighbour
 
 	# Получить соседний объект по направлению противоположному относительно SE
-	func OppositeSE() -> Dot:
+	func GetOppositeSE() -> Dot:
 		return m_neighbours[EOppositeCardinalPoints.SE]
 
 	# Изменить соседний объект по направлению противоположному относительно SE
@@ -189,8 +193,9 @@ var m_dotNeighbours: DotNeighbours = null setget ,GetDotNeighbours
 var m_position: Vector2 = Vector2() setget SetPosition, GetPosition
 
 
-func _init():
+func _init(position: Vector2 = Vector2()):
 	m_dotNeighbours = DotNeighbours.new()
+	m_position = position
 
 
 func GetDotNeighbours() -> DotNeighbours:
@@ -204,6 +209,10 @@ func SetPosition(position: Vector2) -> void:
 	m_position = position
 
 
+func Clear() -> void:
+	m_dotNeighbours.Clear()
+
+
 ### UpdateNeighbours ###
 
 # Обновить соседние точки на N, общие как для точки на N так и для текущей точки.
@@ -211,59 +220,130 @@ func SetPosition(position: Vector2) -> void:
 
 func UpdateNeighbourN() -> void:
 	var neighbour = m_dotNeighbours.GetN().GetDotNeighbours()
-	neighbour.SetOppositeN(self)
-	neighbour.SetW(m_dotNeighbours.GetNW())
-	neighbour.SetE(m_dotNeighbours.GetNE())
-	neighbour.SetSW(m_dotNeighbours.GetW())
-	neighbour.SetSE(m_dotNeighbours.GetE())
+	
+	if !neighbour.GetW() && m_dotNeighbours.GetNW():
+		neighbour.SetW(m_dotNeighbours.GetNW())
+		neighbour.GetW().GetDotNeighbours().SetOppositeW(m_dotNeighbours.GetN())
+		
+	if !neighbour.GetE() && m_dotNeighbours.GetNE():
+		neighbour.SetE(m_dotNeighbours.GetNE())
+		neighbour.GetE().GetDotNeighbours().SetOppositeE(m_dotNeighbours.GetN())
+	
+	if !neighbour.GetSW() && m_dotNeighbours.GetW():
+		neighbour.SetSW(m_dotNeighbours.GetW())
+		neighbour.GetSW().GetDotNeighbours().SetOppositeSW(m_dotNeighbours.GetN())
+	
+	if !neighbour.GetSE() && m_dotNeighbours.GetE():
+		neighbour.SetSE(m_dotNeighbours.GetE())
+		neighbour.GetSE().GetDotNeighbours().SetOppositeSE(m_dotNeighbours.GetN())
+
 
 func UpdateNeighbourNE() -> void:
 	var neighbour = m_dotNeighbours.GetNE().GetDotNeighbours()
-	neighbour.SetOppositeNE(self)
-	neighbour.SetW(m_dotNeighbours.GetN())
-	neighbour.SetS(m_dotNeighbours.GetE())
+	
+	if !neighbour.GetW() && m_dotNeighbours.GetN():
+		neighbour.SetW(m_dotNeighbours.GetN())
+		neighbour.GetW().GetDotNeighbours().SetOppositeW(m_dotNeighbours.GetNE())
+	
+	if !neighbour.GetS() && m_dotNeighbours.GetE():
+		neighbour.SetS(m_dotNeighbours.GetE())
+		neighbour.GetS().GetDotNeighbours().SetOppositeS(m_dotNeighbours.GetNE())
+
 
 func UpdateNeighbourE() -> void:
 	var neighbour = m_dotNeighbours.GetE().GetDotNeighbours()
-	neighbour.SetOppositeE(self)
-	neighbour.SetN(m_dotNeighbours.GetNE())
-	neighbour.SetS(m_dotNeighbours.GetSE())
-	neighbour.SetNW(m_dotNeighbours.GetN())
-	neighbour.SetSW(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetN() && m_dotNeighbours.GetNE():
+		neighbour.SetN(m_dotNeighbours.GetNE())
+		neighbour.GetN().GetDotNeighbours().SetOppositeN(m_dotNeighbours.GetE())
+	
+	if !neighbour.GetS() && m_dotNeighbours.GetSE():
+		neighbour.SetS(m_dotNeighbours.GetSE())
+		neighbour.GetS().GetDotNeighbours().SetOppositeS(m_dotNeighbours.GetE())
+	
+	if !neighbour.GetNW() && m_dotNeighbours.GetN():
+		neighbour.SetNW(m_dotNeighbours.GetN())
+		neighbour.GetNW().GetDotNeighbours().SetOppositeNW(m_dotNeighbours.GetE())
+	
+	if !neighbour.GetSW() && m_dotNeighbours.GetS():
+		neighbour.SetSW(m_dotNeighbours.GetS())
+		neighbour.GetSW().GetDotNeighbours().SetOppositeSW(m_dotNeighbours.GetE())
+
 
 func UpdateNeighbourSE() -> void:
 	var neighbour = m_dotNeighbours.GetSE().GetDotNeighbours()
-	neighbour.SetOppositeSE(self)
-	neighbour.SetN(m_dotNeighbours.GetE())
-	neighbour.SetW(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetN() && m_dotNeighbours.GetE():
+		neighbour.SetN(m_dotNeighbours.GetE())
+		neighbour.GetN().GetDotNeighbours().SetOppositeN(m_dotNeighbours.GetSE())
+	
+	if !neighbour.GetW() && m_dotNeighbours.GetS():
+		neighbour.SetW(m_dotNeighbours.GetS())
+		neighbour.GetW().GetDotNeighbours().SetOppositeW(m_dotNeighbours.GetSE())
+
 
 func UpdateNeighbourS() -> void:
 	var neighbour = m_dotNeighbours.GetS().GetDotNeighbours()
-	neighbour.SetOppositeS(self)
-	neighbour.SetW(m_dotNeighbours.GetSW())
-	neighbour.SetE(m_dotNeighbours.GetSE())
-	neighbour.SetNW(m_dotNeighbours.GetW())
-	neighbour.SetNE(m_dotNeighbours.GetE())
+	
+	if !neighbour.GetW() && m_dotNeighbours.GetSW():
+		neighbour.SetW(m_dotNeighbours.GetSW())
+		neighbour.GetW().GetDotNeighbours().SetOppositeW(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetE() && m_dotNeighbours.GetSE():
+		neighbour.SetE(m_dotNeighbours.GetSE())
+		neighbour.GetE().GetDotNeighbours().SetOppositeE(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetNW() && m_dotNeighbours.GetW():
+		neighbour.SetNW(m_dotNeighbours.GetW())
+		neighbour.GetNW().GetDotNeighbours().SetOppositeNW(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetNE() && m_dotNeighbours.GetE():
+		neighbour.SetNE(m_dotNeighbours.GetE())
+		neighbour.GetNE().GetDotNeighbours().SetOppositeNE(m_dotNeighbours.GetS())
+
 
 func UpdateNeighbourSW() -> void:
 	var neighbour = m_dotNeighbours.GetSW().GetDotNeighbours()
-	neighbour.SetOppositeSW(self)
-	neighbour.SetN(m_dotNeighbours.GetW())
-	neighbour.SetE(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetN() && m_dotNeighbours.GetW():
+		neighbour.SetN(m_dotNeighbours.GetW())
+		neighbour.GetN().GetDotNeighbours().SetOppositeN(m_dotNeighbours.GetSW())
+	
+	if !neighbour.GetE() && m_dotNeighbours.GetS():
+		neighbour.SetE(m_dotNeighbours.GetS())
+		neighbour.GetE().GetDotNeighbours().SetOppositeE(m_dotNeighbours.GetSW())
+
 
 func UpdateNeighbourW() -> void:
 	var neighbour = m_dotNeighbours.GetW().GetDotNeighbours()
-	neighbour.SetOppositeW(self)
-	neighbour.SetN(m_dotNeighbours.GetNW())
-	neighbour.SetS(m_dotNeighbours.GetSW())
-	neighbour.SetNE(m_dotNeighbours.GetN())
-	neighbour.SetSE(m_dotNeighbours.GetS())
+	
+	if !neighbour.GetN() && m_dotNeighbours.GetNW():
+		neighbour.SetN(m_dotNeighbours.GetNW())
+		neighbour.GetN().GetDotNeighbours().SetOppositeN(m_dotNeighbours.GetW())
+	
+	if !neighbour.GetS() && m_dotNeighbours.GetSW():
+		neighbour.SetS(m_dotNeighbours.GetSW())
+		neighbour.GetS().GetDotNeighbours().SetOppositeS(m_dotNeighbours.GetW())
+	
+	if !neighbour.GetNE() && m_dotNeighbours.GetN():
+		neighbour.SetNE(m_dotNeighbours.GetN())
+		neighbour.GetNE().GetDotNeighbours().SetOppositeNE(m_dotNeighbours.GetW())
+	
+	if !neighbour.GetSE() && m_dotNeighbours.GetS():
+		neighbour.SetSE(m_dotNeighbours.GetS())
+		neighbour.GetSE().GetDotNeighbours().SetOppositeSE(m_dotNeighbours.GetW())
+	
 
 func UpdateNeighbourNW() -> void:
 	var neighbour = m_dotNeighbours.GetNW().GetDotNeighbours()
-	neighbour.SetOppositeW(self)
-	neighbour.SetE(m_dotNeighbours.GetN())
-	neighbour.SetS(m_dotNeighbours.GetW())
+	
+	if !neighbour.GetE() && m_dotNeighbours.GetN():
+		neighbour.SetE(m_dotNeighbours.GetN())
+		neighbour.GetE().GetDotNeighbours().SetOppositeE(m_dotNeighbours.GetNW())
+	
+	if !neighbour.GetS() && m_dotNeighbours.GetW():
+		neighbour.SetS(m_dotNeighbours.GetW())
+		neighbour.GetS().GetDotNeighbours().SetOppositeS(m_dotNeighbours.GetNW())
 
 
 ## Высота точки. От нее зависит цвет и скорость захвата

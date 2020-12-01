@@ -14,10 +14,10 @@ class_name DotStructure
 
 # Класс для создания соседних точек
 class NeighboursGenerator extends Resource:
-	const MAXCOORD: float = 5.0
+	const MAXCOORD: float = 20.0
 	
 	var m_queue: Array = []
-	var m_dot: Dot = null
+	var m_neighbour: Dot = null
 	
 	func _init(root: Dot):
 		if root:
@@ -25,8 +25,7 @@ class NeighboursGenerator extends Resource:
 	
 	func Generate() -> void:
 		while !m_queue.empty():
-			m_dot = m_queue.pop_front()
-			if m_dot:
+			if m_queue.front():
 				CreateN()
 				CreateNE()
 				CreateE()
@@ -35,97 +34,125 @@ class NeighboursGenerator extends Resource:
 				CreateSW()
 				CreateW()
 				CreateNW()
+			
+			m_queue.pop_front()
 	
 	# Заталкиваем в очередь переданную точку, если она соответствует условиям
-	func PushToQueue(neighbour: Dot) -> void:
-		var absPosition: Vector2 = neighbour.GetPosition().abs()
+	func PushToQueue() -> bool:
+		var absPosition: Vector2 = m_neighbour.GetPosition().abs()
 		if absPosition.x < MAXCOORD && absPosition.y < MAXCOORD:
-			m_queue.push_back(neighbour)
+			m_queue.push_back(m_neighbour)
+			return true
+		return false
 	
 	# Для каждой Create*() функции проверяем существует ли соседняя точка.
 	# Если нет, то создаем ее, обновляем для нее соседей и заталкиваем в очередь.
 	# Если существует, то просто обновляем соседей
 	
 	func CreateN() -> void:
-		if !m_dot.GetDotNeighbours().GetN():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.UP)
-			m_dot.GetDotNeighbours().SetN(neighbour)
-			m_dot.UpdateNeighbourN()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetN():
+			m_queue.front().UpdateNeighbourN()
 		else:
-			m_dot.UpdateNeighbourN()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.UP)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetN(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeN(m_queue.front())
+			m_queue.front().UpdateNeighbourN()
+			
 	
 	func CreateNE() -> void:
-		if !m_dot.GetDotNeighbours().GetNE():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.UP + Vector2.RIGHT)
-			m_dot.GetDotNeighbours().SetNE(neighbour)
-			m_dot.UpdateNeighbourNE()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetNE():
+			m_queue.front().UpdateNeighbourNE()
 		else:
-			m_dot.UpdateNeighbourNE()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.UP + Vector2.RIGHT)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetNE(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeNE(m_queue.front())
+			m_queue.front().UpdateNeighbourNE()
 	
 	func CreateE() -> void:
-		if !m_dot.GetDotNeighbours().GetE():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.RIGHT)
-			m_dot.GetDotNeighbours().SetE(neighbour)
-			m_dot.UpdateNeighbourE()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetE():
+			m_queue.front().UpdateNeighbourE()
 		else:
-			m_dot.UpdateNeighbourE()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.RIGHT)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetE(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeE(m_queue.front())
+			m_queue.front().UpdateNeighbourE()
 	
 	func CreateSE() -> void:
-		if !m_dot.GetDotNeighbours().GetSE():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.DOWN + Vector2.RIGHT)
-			m_dot.GetDotNeighbours().SetSE(neighbour)
-			m_dot.UpdateNeighbourSE()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetSE():
+			m_queue.front().UpdateNeighbourSE()
 		else:
-			m_dot.UpdateNeighbourSE()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.DOWN + Vector2.RIGHT)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetSE(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeSE(m_queue.front())
+			m_queue.front().UpdateNeighbourSE()
 	
 	func CreateS() -> void:
-		if !m_dot.GetDotNeighbours().GetS():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.DOWN)
-			m_dot.GetDotNeighbours().SetS(neighbour)
-			m_dot.UpdateNeighbourS()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetS():
+			m_queue.front().UpdateNeighbourS()
 		else:
-			m_dot.UpdateNeighbourS()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.DOWN)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetS(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeS(m_queue.front())
+			m_queue.front().UpdateNeighbourS()
 	
 	func CreateSW() -> void:
-		if !m_dot.GetDotNeighbours().GetSW():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.DOWN + Vector2.LEFT)
-			m_dot.GetDotNeighbours().SetSW(neighbour)
-			m_dot.UpdateNeighbourSW()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetSW():
+			m_queue.front().UpdateNeighbourSW()
 		else:
-			m_dot.UpdateNeighbourSW()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.DOWN + Vector2.LEFT)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetSW(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeSW(m_queue.front())
+			m_queue.front().UpdateNeighbourSW()
 	
 	func CreateW() -> void:
-		if !m_dot.GetDotNeighbours().GetW():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.LEFT)
-			m_dot.GetDotNeighbours().SetW(neighbour)
-			m_dot.UpdateNeighbourW()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetW():
+			m_queue.front().UpdateNeighbourW()
 		else:
-			m_dot.UpdateNeighbourW()
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.LEFT)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetW(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeW(m_queue.front())
+			m_queue.front().UpdateNeighbourW()
 	
 	func CreateNW() -> void:
-		if !m_dot.GetDotNeighbours().GetNW():
-			var neighbour: Dot = Dot.new()
-			neighbour.SetPosition(m_dot.GetPosition() + Vector2.UP + Vector2.LEFT)
-			m_dot.GetDotNeighbours().SetNW(neighbour)
-			m_dot.UpdateNeighbourNW()
-			PushToQueue(neighbour)
+		if m_queue.front().GetDotNeighbours().GetNW():
+			m_queue.front().UpdateNeighbourNW()
 		else:
-			m_dot.UpdateNeighbourNW()
-
+			m_neighbour = Dot.new()
+			m_neighbour.SetPosition(m_queue.front().GetPosition() + Vector2.UP + Vector2.LEFT)
+			if not PushToQueue():
+				m_neighbour = null
+				return
+			m_queue.front().GetDotNeighbours().SetNW(m_queue.back())
+			m_queue.back().GetDotNeighbours().SetOppositeNW(m_queue.front())
+			m_queue.front().UpdateNeighbourNW()
 
 
 var m_root: Dot = null
@@ -133,3 +160,23 @@ var m_root: Dot = null
 func _init():
 	m_root = Dot.new()
 	NeighboursGenerator.new(m_root).Generate()
+
+
+func Clear() -> void:
+	if !m_root:
+		return
+	
+	var queue: Array = [m_root]
+	
+	while (!queue.empty()):
+		var dot: Dot = queue.pop_front()
+		if !dot:
+			continue
+		
+		var neighbours: Array = dot.GetDotNeighbours().GetNeighbours()
+		for i in range(neighbours.size()):
+			if neighbours[i]:
+				queue.push_back(neighbours[i])
+		
+		if dot:
+			dot.Clear()
