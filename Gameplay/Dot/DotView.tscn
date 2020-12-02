@@ -4,7 +4,7 @@
 [ext_resource path="res://Sprite/Dot/default.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 24.0
+radius = 14.0
 
 [node name="DotView" type="Node2D"]
 script = ExtResource( 1 )

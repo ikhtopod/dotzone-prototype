@@ -4,9 +4,25 @@ extends Node2D
 # Шаблон MVC:
 #     Model: DotStructure
 #     View: DotView
-#     Controller:
-#         View to Model: DotView->ToucnManager->DotStructure
-#         Model to View: DotStructure->DotView
+#     Controller: Battlefield, ToucnManager
+
+# Расстояние между точками
+const DISTANCE_BETWEEN_POINTS: float = 72.0
+
+
+var m_relative: Dot = null setget SetRelative, GetRelative
+
+func GetRelative() -> Dot:
+	return m_relative
+
+func SetRelative(relative: Dot) -> void:
+	m_relative = relative
+
+
+func Init(relative: Dot):
+	SetRelative(relative)
+	position = GetRelative().GetPosition() * DISTANCE_BETWEEN_POINTS
+	return self
 
 
 func _on_Area2D_area_entered(area: Area2D):

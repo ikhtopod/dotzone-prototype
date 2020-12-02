@@ -37,8 +37,8 @@ class DotNeighbours extends Resource:
 		  null, null, null, null ] setget ,GetNeighbours
 
 	func GetNeighbours() -> Array:
-		return m_neighbours.duplicate(false)
-		#return m_neighbours
+		#return m_neighbours.duplicate(false)
+		return m_neighbours
 	
 	func Clear() -> void:
 		m_neighbours.clear()
@@ -191,7 +191,7 @@ class DotNeighbours extends Resource:
 
 var m_dotNeighbours: DotNeighbours = null setget ,GetDotNeighbours
 var m_position: Vector2 = Vector2() setget SetPosition, GetPosition
-
+var isChecked: bool = false
 
 func _init(position: Vector2 = Vector2()):
 	m_dotNeighbours = DotNeighbours.new()

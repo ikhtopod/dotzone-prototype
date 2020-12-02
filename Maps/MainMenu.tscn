@@ -5,7 +5,7 @@
 [ext_resource path="res://Maps/MainMenu.gd" type="Script" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 72
+size = 48
 outline_size = 3
 outline_color = Color( 0.176471, 0.176471, 0.176471, 1 )
 use_filter = true
@@ -25,39 +25,39 @@ __meta__ = {
 }
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
-margin_right = 768.0
-margin_bottom = 271.0
+margin_right = 360.0
+margin_bottom = 105.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
-margin_top = 275.0
-margin_right = 768.0
-margin_bottom = 1090.0
+margin_top = 109.0
+margin_right = 360.0
+margin_bottom = 530.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 3.0
+size_flags_stretch_ratio = 4.0
 
 [node name="MarginContainer4" type="MarginContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-margin_right = 34.0
-margin_bottom = 815.0
+margin_right = 25.0
+margin_bottom = 421.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-margin_left = 38.0
-margin_right = 729.0
-margin_bottom = 815.0
+margin_left = 29.0
+margin_right = 330.0
+margin_bottom = 421.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-size_flags_stretch_ratio = 20.0
+size_flags_stretch_ratio = 12.0
 alignment = 1
 
 [node name="InformationLabel" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_left = 152.0
-margin_top = 194.0
-margin_right = 539.0
-margin_bottom = 290.0
+margin_left = 20.0
+margin_top = 91.0
+margin_right = 281.0
+margin_bottom = 156.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
 size_flags_stretch_ratio = 3.0
@@ -67,32 +67,32 @@ align = 1
 valign = 1
 
 [node name="StartButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 488.0
-margin_right = 691.0
-margin_bottom = 649.0
+margin_top = 251.0
+margin_right = 301.0
+margin_bottom = 334.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "START"
 
 [node name="ExitButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
-margin_top = 653.0
-margin_right = 691.0
-margin_bottom = 815.0
+margin_top = 338.0
+margin_right = 301.0
+margin_bottom = 421.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "EXIT"
 
 [node name="MarginContainer3" type="MarginContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-margin_left = 733.0
-margin_right = 768.0
-margin_bottom = 815.0
+margin_left = 334.0
+margin_right = 360.0
+margin_bottom = 421.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
-margin_top = 1094.0
-margin_right = 768.0
-margin_bottom = 1366.0
+margin_top = 534.0
+margin_right = 360.0
+margin_bottom = 640.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]

@@ -45,26 +45,25 @@ __meta__ = {
 }
 
 [node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/VBoxContainer"]
-margin_right = 768.0
-margin_bottom = 123.0
+margin_right = 360.0
+margin_bottom = 65.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/CenterContainer" groups=[
 "Dot_Printer",
 ]]
-margin_left = 340.0
-margin_top = 29.0
-margin_right = 427.0
-margin_bottom = 94.0
+margin_left = 136.0
+margin_right = 223.0
+margin_bottom = 65.0
 size_flags_vertical = 6
 custom_fonts/font = SubResource( 3 )
 text = "..."
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/VBoxContainer"]
-margin_top = 127.0
-margin_right = 768.0
-margin_bottom = 1366.0
+margin_top = 69.0
+margin_right = 360.0
+margin_bottom = 640.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 10.0

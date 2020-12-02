@@ -7,21 +7,20 @@ class_name DotStructure
 # Шаблон MVC:
 #     Model: DotStructure
 #     View: DotView
-#     Controller:
-#         View to Model: DotView->ToucnManager->DotStructure
-#         Model to View: DotStructure->DotView
+#     Controller: Battlefield, ToucnManager
 
 
 # Класс для создания соседних точек
 class NeighboursGenerator extends Resource:
-	const MAXCOORD: float = 50.0
-	
 	var m_queue: Array = []
+	var m_halfSize: float = 0.0
 	var m_neighbour: Dot = null
 	
-	func _init(root: Dot):
+	func _init(root: Dot, halfSize: float):
 		if root:
 			m_queue.push_back(root)
+		
+		m_halfSize = halfSize
 	
 	func Generate() -> void:
 		while !m_queue.empty():
@@ -40,7 +39,7 @@ class NeighboursGenerator extends Resource:
 	# Заталкиваем в очередь переданную точку, если она соответствует условиям
 	func PushToQueue() -> bool:
 		var absPosition: Vector2 = m_neighbour.GetPosition().abs()
-		if absPosition.x < MAXCOORD && absPosition.y < MAXCOORD:
+		if absPosition.x < m_halfSize && absPosition.y < m_halfSize:
 			m_queue.push_back(m_neighbour)
 			return true
 		return false
@@ -155,11 +154,21 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourNW()
 
 
-var m_root: Dot = null
+var m_root: Dot = null setget SetRoot, GetRoot
+var m_halfSize: float = 0.0
 
-func _init():
+func _init(halfSize: float = 50.0):
+	m_halfSize = halfSize
 	m_root = Dot.new()
-	NeighboursGenerator.new(m_root).Generate()
+	NeighboursGenerator.new(m_root, m_halfSize).Generate()
+
+
+func GetRoot() -> Dot:
+	return m_root
+
+func SetRoot(root: Dot) -> void:
+	m_root = root 
+	# TODO: Если root == null, то найти ближайшего не null соседа и сделать его root
 
 
 func Clear() -> void:
