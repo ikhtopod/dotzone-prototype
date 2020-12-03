@@ -15,31 +15,41 @@ class NeighboursGenerator extends Resource:
 	var m_queue: Array = []
 	var m_halfSize: float = 0.0
 	var m_neighbour: Dot = null
+	var m_counter: int = 0
 	
 	func _init(root: Dot, halfSize: float):
 		if root:
 			m_queue.push_back(root)
 		
 		m_halfSize = halfSize
+		UpdateCounter()
 	
-	func Generate() -> void:
-		while !m_queue.empty():
+	func UpdateCounter() -> void:
+		m_counter = int(pow(m_halfSize, 2)) - 4
+	
+	func Generate() -> NeighboursGenerator:
+		UpdateCounter()
+		
+		while !m_queue.empty() and m_counter > 1:
 			if m_queue.front():
 				CreateN()
-				CreateNE()
-				CreateE()
-				CreateSE()
 				CreateS()
-				CreateSW()
 				CreateW()
+				CreateE()
+				CreateSW()
 				CreateNW()
+				CreateNE()
+				CreateSE()
 			
 			m_queue.pop_front()
+		
+		return self
 	
 	# Заталкиваем в очередь переданную точку, если она соответствует условиям
 	func PushToQueue() -> bool:
 		var absPosition: Vector2 = m_neighbour.GetPosition().abs()
-		if absPosition.x < m_halfSize && absPosition.y < m_halfSize:
+		if (absPosition.x < m_halfSize && absPosition.y < m_halfSize && m_counter > 0):
+			m_counter -= 1
 			m_queue.push_back(m_neighbour)
 			return true
 		return false
@@ -49,6 +59,9 @@ class NeighboursGenerator extends Resource:
 	# Если существует, то просто обновляем соседей
 	
 	func CreateN() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetN():
 			m_queue.front().UpdateNeighbourN()
 		else:
@@ -63,6 +76,9 @@ class NeighboursGenerator extends Resource:
 			
 	
 	func CreateNE() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetNE():
 			m_queue.front().UpdateNeighbourNE()
 		else:
@@ -76,6 +92,9 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourNE()
 	
 	func CreateE() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetE():
 			m_queue.front().UpdateNeighbourE()
 		else:
@@ -89,6 +108,9 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourE()
 	
 	func CreateSE() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetSE():
 			m_queue.front().UpdateNeighbourSE()
 		else:
@@ -102,6 +124,9 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourSE()
 	
 	func CreateS() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetS():
 			m_queue.front().UpdateNeighbourS()
 		else:
@@ -115,6 +140,9 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourS()
 	
 	func CreateSW() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetSW():
 			m_queue.front().UpdateNeighbourSW()
 		else:
@@ -128,6 +156,9 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourSW()
 	
 	func CreateW() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetW():
 			m_queue.front().UpdateNeighbourW()
 		else:
@@ -141,6 +172,9 @@ class NeighboursGenerator extends Resource:
 			m_queue.front().UpdateNeighbourW()
 	
 	func CreateNW() -> void:
+		if m_counter < 1:
+			return
+		
 		if m_queue.front().GetDotNeighbours().GetNW():
 			m_queue.front().UpdateNeighbourNW()
 		else:
@@ -153,14 +187,15 @@ class NeighboursGenerator extends Resource:
 			m_queue.back().GetDotNeighbours().SetOppositeNW(m_queue.front())
 			m_queue.front().UpdateNeighbourNW()
 
-
-var m_root: Dot = null setget SetRoot, GetRoot
 var m_halfSize: float = 0.0
+var m_root: Dot = null setget SetRoot, GetRoot
 
-func _init(halfSize: float = 50.0):
+func _init(halfSize: float = 5.0):
 	m_halfSize = halfSize
 	m_root = Dot.new()
 	NeighboursGenerator.new(m_root, m_halfSize).Generate()
+	NeighboursGenerator.new(m_root.GetDotNeighbours().GetE().GetDotNeighbours().GetE(), m_halfSize).Generate()
+	NeighboursGenerator.new(m_root.GetDotNeighbours().GetW().GetDotNeighbours().GetW(), m_halfSize).Generate()
 
 
 func GetRoot() -> Dot:

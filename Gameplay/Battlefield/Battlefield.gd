@@ -17,7 +17,7 @@ func GetField() -> DotStructure:
 
 
 func _ready():
-	m_field = DotStructure.new(50)
+	m_field = DotStructure.new()
 	SimpleShowDots()
 
 
@@ -35,7 +35,7 @@ func SimpleShowDots() -> void:
 	var queue: Array = [rootDotNeighbours]
 	
 	var counter: int = 0
-	var maxDotView: int = int(pow(m_field.m_halfSize, 2) - 1)
+	var maxDotView: int = int(pow(m_field.m_halfSize, 2) - 1) + 10000
 	while !queue.empty() and counter < maxDotView:
 		var dotNeighbours: Dot.DotNeighbours = queue.pop_front()
 		
