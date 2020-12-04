@@ -19,6 +19,7 @@ func _exit_tree():
 	for child in get_children():
 		if child:
 			child.queue_free()
+	
 	queue_free()
 
 
