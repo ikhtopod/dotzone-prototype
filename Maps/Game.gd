@@ -31,6 +31,10 @@ func _notification(what):
 		goto_main_menu()
 
 
+func _enter_tree():
+	GameManager.currenGameplayPhase = GameManager.EGameplayPhase.GAME
+
+
 func _exit_tree():
 	for child in get_children():
 		child.queue_free()

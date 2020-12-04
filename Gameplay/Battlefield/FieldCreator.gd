@@ -3,21 +3,29 @@ extends Resource
 class_name FieldCreator
 
 
-const BASE: int = 2
+const BASE: int = 3
 const POWER: int = 5
 var MIN_SPINE: int = pow(BASE, POWER)
-var MIN_FIELD: int = 1 #MIN_SPINE * POWER
+var MIN_FIELD: int = MIN_SPINE * POWER
 
+var m_spineLastKey: String = ""
+var m_fieldLastKey: String = ""
 
-var m_spine: Array = [] setget ,GetSpine
+var m_spine := {} setget ,GetSpine
 var m_field := {} setget ,GetField
 
 
-func GetSpine() -> Array:
+func GetSpine() -> Dictionary:
 	return m_spine
 
 func GetField() -> Dictionary:
 	return m_field
+
+func GetLastAddedPoint() -> Point:
+	if m_field.has(m_fieldLastKey):
+		return m_field[m_fieldLastKey]
+	
+	return null
 
 
 func _init():
@@ -32,89 +40,47 @@ func Clear() -> void:
 		m_field.clear()
 
 
-func Generate() -> void:
-	GenerateSpine()
-	GenerateField()
-	ExtraField()
-
-
-func GenerateSpine() -> void:
-	m_spine.push_back(Point.new())
-
-	for i in range(m_spine.size(), MIN_SPINE):
-		PushBackRandomPointToSpine()
-
-
-func GenerateField() -> void:
-	for i in range(m_spine.size()):
-		if not m_spine[i]:
-			continue
+# объекты генерируются "на лету", посредством yield()
+func GenerateCoroutine() -> void:
+	m_spineLastKey = Point.new().ToString()
+	m_spine[m_spineLastKey] = Point.new()
+	
+	while m_spine.size() < MIN_SPINE and m_field.size() < MIN_FIELD:
+		AddNextRandomPoint()
 		
-		Create21(m_spine[i])
-		
+		for x in range(-2, 3):
+			for y in range(-2, 3):
+				if abs(x) == 2 and abs(y) == 2:
+					continue
+				
+				# PushToFieldIfUnique()
+				var point: Point = m_spine[m_spineLastKey].Add(Point.new(x, y))
+				if not m_field.has(point.ToString()):
+					m_fieldLastKey = point.ToString()
+					m_field[m_fieldLastKey] = point
+					yield()
 
-func ExtraField() -> void:
-	if m_field and m_field.size() >= MIN_FIELD:
-		return
+
+func AddNextRandomPoint() -> String:
+	var point: Point = m_spine[m_spineLastKey] 
 	
-	while m_field.size() < MIN_FIELD:
-		PushBackRandomPointToSpine()
-		Create21(m_spine.back())
-
-
-func Create21(centralPoint: Point) -> void:
-	for x in range(-2, 3):
-		for y in range(-2, 3):
-			if abs(x) == 2 and abs(y) == 2:
-				continue
-			
-			PushToFieldIfUnique(centralPoint.Add(Point.new(x, y)))
-
-
-func PushToFieldIfUnique(point: Point) -> void:
-	if not m_field.has(point.ToString()):
-		m_field[point.ToString()] = point
-
-
-func __HasPointInArray(point: Point, points: Array) -> bool:
-	if point and points:
-		for p in points:
-			if not p:
-				continue
-			
-			if p.Eq(point):
-				return true
-	
-	return false;
-
-func HasPointInSpine(point: Point) -> bool:
-	return __HasPointInArray(point, m_spine);
-
-
-func GetRandomPointFromSpine() -> Point:
-	if m_spine.empty():
-		return null
-	
-	return m_spine[randi() % m_spine.size()]
-
-
-func GetRandomOffset() -> int:
-	return randi() % 3 - 1 # random: -1, 0 or 1
-
-
-func PushBackRandomPointToSpine() -> void:
-	m_spine.push_back(GetNextRandomPoint(m_spine.back()))
-
-
-func GetNextRandomPoint(point: Point) -> Point:
 	if point:
-		while HasPointInSpine(point):
-			var rndPoint: Point = GetRandomPointFromSpine()
+		while m_spine.has(point.ToString()):
+			# GetRandomPointFromSpine()
+			var rndPoint: Point = null
+			if !m_spine.empty():
+				rndPoint = m_spine[m_spine.keys()[randi() % m_spine.size()]]
 			
 			while point.Eq(rndPoint):
 				point = Point.new().InitPoint(rndPoint)
 				point.x += GetRandomOffset()
 				point.y += GetRandomOffset()
 	
-	return point
+	m_spineLastKey = point.ToString()
+	m_spine[m_spineLastKey] = point
+	
+	return m_spineLastKey
 
+
+func GetRandomOffset() -> int:
+	return randi() % 3 - 1 # random: -1, 0 or 1

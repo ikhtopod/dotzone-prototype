@@ -4,6 +4,8 @@ extends Node2D
 onready var gameSceneName: String = "res://Maps/Game.tscn"
 
 func _ready():
+	GameManager.currenGameplayPhase = GameManager.EGameplayPhase.MAIN_MENU
+	
 	var screenSize: Vector2 = get_viewport_rect().size
 	var informationLabel: Node = \
 		$"CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer/InformationLabel" as Node
