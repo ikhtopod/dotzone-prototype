@@ -1,64 +1,41 @@
 extends Node2D
 
-# Шаблон MVC:
-#     Model: DotStructure
-#     View: DotView
-#     Controller: Battlefield, ToucnManager
+
+const DotScene: PackedScene = preload("res://Gameplay/Dot/Dot.tscn")
 
 
-const DotViewScene: PackedScene = preload("res://Gameplay/Dot/DotView.tscn")
+var m_fieldCreator: FieldCreator = null
 
-
-# Модель поля
-var m_field: DotStructure = null setget ,GetField
-
-func GetField() -> DotStructure:
-	return m_field
-
-
-func _ready():
-	m_field = DotStructure.new()
-	SimpleShowDots()
-
-
-func SimpleShowDots() -> void:
-	if !m_field.GetRoot():
-		return
-	
-	add_child(DotViewScene.instance().Init(m_field.GetRoot()))
-	m_field.GetRoot().isChecked = true
-	
-	var rootDotNeighbours: Dot.DotNeighbours = m_field.GetRoot().GetDotNeighbours()
-	if !rootDotNeighbours:
-		return
-	
-	var queue: Array = [rootDotNeighbours]
-	
-	var counter: int = 0
-	var maxDotView: int = int(pow(m_field.m_halfSize, 2) - 1) + 10000
-	while !queue.empty() and counter < maxDotView:
-		var dotNeighbours: Dot.DotNeighbours = queue.pop_front()
-		
-		if !dotNeighbours:
-			continue
-		
-		for dot in dotNeighbours.GetNeighbours():
-			if dot && !dot.isChecked:
-				var newDotNeighbours: Dot.DotNeighbours = dot.GetDotNeighbours()
-				if newDotNeighbours:
-					queue.push_back(newDotNeighbours)
-				
-				add_child(DotViewScene.instance().Init(dot))
-				dot.isChecked = true
-				counter += 1
-				if counter >= maxDotView:
-					break
-
-
-# Очистить поле
-func ClearField() -> void:
-	m_field.Clear()
+func _enter_tree():
+	m_fieldCreator = FieldCreator.new()
+	m_fieldCreator.Generate()
+	InstantiateDots()
 
 
 func _exit_tree():
-	ClearField()
+	if m_fieldCreator:
+		m_fieldCreator.Clear()
+	
+	for child in get_children():
+		if child:
+			child.queue_free()
+	queue_free()
+
+
+func InstantiateDots() -> void:
+	var blockNodeCounter: int = 0
+	var blockNode: Node2D = null
+	var counter: int = 0
+	
+	for point in m_fieldCreator.GetField():
+		if counter > 25 or counter < 1:
+			counter = 1
+			blockNodeCounter += 1
+			blockNode = Node2D.new()
+			blockNode.name = "BlockDots%05d" % blockNodeCounter
+			add_child(blockNode)
+			
+		var dotScene = DotScene.instance().Init(point)
+		dotScene.name = "Dot%05d" % counter
+		blockNode.add_child(dotScene)
+		counter += 1

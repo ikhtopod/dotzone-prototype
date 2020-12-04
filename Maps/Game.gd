@@ -31,6 +31,12 @@ func _notification(what):
 		goto_main_menu()
 
 
+func _exit_tree():
+	for child in get_children():
+		child.queue_free()
+	queue_free()
+
+
 func goto_main_menu():
 	var result = get_tree().change_scene(mainMenuSceneName)
 	

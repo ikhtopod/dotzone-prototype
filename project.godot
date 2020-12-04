@@ -10,24 +10,24 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Resource",
-"class": "Dot",
+"class": "FieldCreator",
 "language": "GDScript",
-"path": "res://Gameplay/Dot/Dot.gd"
-}, {
-"base": "Resource",
-"class": "DotStructure",
-"language": "GDScript",
-"path": "res://Gameplay/Dot/DotStructure.gd"
+"path": "res://Gameplay/Battlefield/FieldCreator.gd"
 }, {
 "base": "Reference",
 "class": "LinkedList",
 "language": "GDScript",
 "path": "res://Library/Collection/LinkedList.gd"
+}, {
+"base": "Reference",
+"class": "Point",
+"language": "GDScript",
+"path": "res://Library/Point.gd"
 } ]
 _global_script_class_icons={
-"Dot": "",
-"DotStructure": "",
-"LinkedList": ""
+"FieldCreator": "",
+"LinkedList": "",
+"Point": ""
 }
 
 [application]

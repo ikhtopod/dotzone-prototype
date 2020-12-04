@@ -4,3 +4,11 @@ extends Node
 
 # Индикатор захвата территории
 # Список игроков
+
+
+# Расстояние между точками
+const DISTANCE_BETWEEN_POINTS: float = 72.0
+
+### Tags ###
+const PLAYER_TAG: String = "Player"
+const ENEMY_TAG: String = "Enemy"
