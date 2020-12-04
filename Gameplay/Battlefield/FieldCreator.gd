@@ -3,7 +3,7 @@ extends Resource
 class_name FieldCreator
 
 
-const BASE: int = 3
+const BASE: int = 2
 const POWER: int = 5
 var MIN_SPINE: int = pow(BASE, POWER)
 var MIN_FIELD: int = MIN_SPINE * POWER
@@ -53,7 +53,6 @@ func GenerateCoroutine() -> void:
 				if abs(x) == 2 and abs(y) == 2:
 					continue
 				
-				# PushToFieldIfUnique()
 				var point: Point = m_spine[m_spineLastKey].Add(Point.new(x, y))
 				if not m_field.has(point.ToString()):
 					m_fieldLastKey = point.ToString()
@@ -61,26 +60,22 @@ func GenerateCoroutine() -> void:
 					yield()
 
 
-func AddNextRandomPoint() -> String:
+func AddNextRandomPoint() -> void:
 	var point: Point = m_spine[m_spineLastKey] 
 	
-	if point:
-		while m_spine.has(point.ToString()):
-			# GetRandomPointFromSpine()
-			var rndPoint: Point = null
-			if !m_spine.empty():
-				rndPoint = m_spine[m_spine.keys()[randi() % m_spine.size()]]
-			
-			while point.Eq(rndPoint):
-				point = Point.new().InitPoint(rndPoint)
-				point.x += GetRandomOffset()
-				point.y += GetRandomOffset()
+	while m_spine.has(point.ToString()):
+		var rndPoint: Point = m_spine[GetRandomSpineKey()]
+		
+		while point.Eq(rndPoint):
+			point = rndPoint.Add(Point.new(GetRandomOffset(), GetRandomOffset()))
 	
 	m_spineLastKey = point.ToString()
 	m_spine[m_spineLastKey] = point
-	
-	return m_spineLastKey
 
 
 func GetRandomOffset() -> int:
 	return randi() % 3 - 1 # random: -1, 0 or 1
+
+
+func GetRandomSpineKey() -> String:
+	return m_spine.keys()[randi() % m_spine.size()]
