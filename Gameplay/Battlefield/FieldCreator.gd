@@ -6,17 +6,22 @@ class_name FieldCreator
 const BASE: int = 2
 const POWER: int = 5
 var MIN_SPINE: int = pow(BASE, POWER)
-var MIN_FIELD: int = MIN_SPINE * POWER
+var MIN_FIELD: int = 1 #MIN_SPINE * POWER
 
 
 var m_spine: Array = [] setget ,GetSpine
-var m_field: Array = [] setget ,GetField
+var m_field := {} setget ,GetField
+
 
 func GetSpine() -> Array:
 	return m_spine
 
-func GetField() -> Array:
+func GetField() -> Dictionary:
 	return m_field
+
+
+func _init():
+	randomize()
 
 
 func Clear() -> void:
@@ -25,10 +30,6 @@ func Clear() -> void:
 	
 	if m_field:
 		m_field.clear()
-
-
-func _init():
-	randomize()
 
 
 func Generate() -> void:
@@ -49,7 +50,7 @@ func GenerateField() -> void:
 		if not m_spine[i]:
 			continue
 		
-		Create21(m_spine[i].ToVector2())
+		Create21(m_spine[i])
 		
 
 func ExtraField() -> void:
@@ -58,40 +59,21 @@ func ExtraField() -> void:
 	
 	while m_field.size() < MIN_FIELD:
 		PushBackRandomPointToSpine()
-		Create21(m_spine.back().ToVector2())
+		Create21(m_spine.back())
 
 
-func Create21(pointAsVec: Vector2) -> void:
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec))
-	
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.UP))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.UP + Vector2.LEFT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.UP + Vector2.RIGHT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.UP + Vector2.UP))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.UP + Vector2.UP + Vector2.LEFT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.UP + Vector2.UP + Vector2.RIGHT))
-	
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.DOWN))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.DOWN + Vector2.LEFT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.DOWN + Vector2.RIGHT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.DOWN + Vector2.DOWN))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.DOWN + Vector2.DOWN + Vector2.LEFT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.DOWN + Vector2.DOWN + Vector2.RIGHT))
-	
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.LEFT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.LEFT + Vector2.LEFT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.LEFT + Vector2.LEFT + Vector2.DOWN))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.LEFT + Vector2.LEFT + Vector2.UP))
-	
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.RIGHT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.RIGHT + Vector2.RIGHT))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.RIGHT + Vector2.RIGHT + Vector2.DOWN))
-	PushToFieldIfUnique(Point.new().InitVector2(pointAsVec + Vector2.RIGHT + Vector2.RIGHT + Vector2.UP))
+func Create21(centralPoint: Point) -> void:
+	for x in range(-2, 3):
+		for y in range(-2, 3):
+			if abs(x) == 2 and abs(y) == 2:
+				continue
+			
+			PushToFieldIfUnique(centralPoint.Add(Point.new(x, y)))
 
 
 func PushToFieldIfUnique(point: Point) -> void:
-	if not HasPointInField(point):
-		m_field.push_back(point)
+	if not m_field.has(point.ToString()):
+		m_field[point.ToString()] = point
 
 
 func __HasPointInArray(point: Point, points: Array) -> bool:
@@ -107,9 +89,6 @@ func __HasPointInArray(point: Point, points: Array) -> bool:
 
 func HasPointInSpine(point: Point) -> bool:
 	return __HasPointInArray(point, m_spine);
-
-func HasPointInField(point: Point) -> bool:
-	return __HasPointInArray(point, m_field);
 
 
 func GetRandomPointFromSpine() -> Point:

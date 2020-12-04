@@ -27,6 +27,9 @@ func InitVector2(vector: Vector2) -> Point:
 func ToVector2() -> Vector2:
 	return Vector2(x, y)
 
+func ToString() -> String:
+	return "Point(%d;%d)" % [x, y]
+
 
 func Abs() -> Point:
 	return Point.new(abs(x), abs(y))

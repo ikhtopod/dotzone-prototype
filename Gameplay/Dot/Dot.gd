@@ -2,6 +2,8 @@ extends Node2D
 
 
 var m_point: Point = Point.new()
+var m_strength: float = 1.0
+var m_color: Color = Color()
 
 
 func Init(point: Point):
