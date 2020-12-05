@@ -6,12 +6,10 @@ const DotScene: PackedScene = preload("res://Gameplay/Dot/Dot.tscn")
 
 var m_fieldCreator: FieldCreator = null
 
+# Генерация объектов Dot
+var m_timerGenerator: Timer = null
 var c_InstantiateDots: GDScriptFunctionState = null
 var c_Generate: GDScriptFunctionState = null
-
-
-func _physics_process(delta):
-	SpawnDots()
 
 
 func _ready():
@@ -20,6 +18,36 @@ func _ready():
 	m_fieldCreator = FieldCreator.new()
 	c_Generate = m_fieldCreator.GenerateCoroutine()
 	c_InstantiateDots = InstantiateDots_Coroutine()
+	
+	InitTimerGenerator()
+
+
+func InitTimerGenerator() -> void:
+	m_timerGenerator = Timer.new()
+	m_timerGenerator.process_mode = Timer.TIMER_PROCESS_IDLE
+	m_timerGenerator.wait_time = 0.01
+	m_timerGenerator.autostart = true
+	m_timerGenerator.one_shot = false
+	
+	m_timerGenerator.connect("timeout", self, "SpawnDots")
+	add_child(m_timerGenerator)
+	m_timerGenerator.start()
+
+
+func StopTimerGenerator() -> void:
+	m_timerGenerator.disconnect("timeout", self, "SpawnDots")
+	m_timerGenerator.stop()
+	m_timerGenerator.queue_free()
+
+
+# С увеличением количества объектов повышается и время их создания.
+# Чем больше объектов, тем через дольшее время будет создан следующий.
+func IncreaseTimerGeneratorTime() -> void:
+	var countObjects: float = float(m_fieldCreator.GetField().size())
+	var newWaitTime: float = 0.01 * (countObjects / 200.0)
+	
+	if newWaitTime > m_timerGenerator.wait_time:
+		m_timerGenerator.wait_time = newWaitTime
 
 
 func _exit_tree():
@@ -37,12 +65,16 @@ func SpawnDots() -> void:
 			
 			if c_InstantiateDots is GDScriptFunctionState and c_InstantiateDots.is_valid():
 				c_InstantiateDots = c_InstantiateDots.resume()
+				IncreaseTimerGeneratorTime()
 		else:
 			GameManager.currenGameplayPhase = GameManager.EGameplayPhase.GAME
 			c_InstantiateDots = null
 			c_Generate = null
+			StopTimerGenerator()
 
 
+# Создание объектов Dot на основе информации последнего сгенерированного
+# объекта Point.
 func InstantiateDots_Coroutine() -> void:
 	var blockNodeCounter: int = 0
 	var blockNode: Node2D = null
