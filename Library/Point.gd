@@ -23,6 +23,23 @@ func InitPoint(point: Point) -> Point:
 func InitVector2(vector: Vector2) -> Point:
 	return InitInt(int(vector.x), int(vector.y))
 
+func InitString(string: String) -> Point:
+	var re: RegEx = RegEx.new()
+	# Ex.: Point(-77; 23), pOiNt(77.0;23.) or (12 ; 22)
+	re.compile("(?ism)^\\s*(?:Point)?\\s*\\(\\s*([+-]?\\d+(?:\\.\\d*)?)\\s*;\\s*([+-]?\\d+(?:\\.\\d*)?)\\s*\\)\\s*$");
+	var result: RegExMatch = re.search(string)
+	
+	var x_: int = 0
+	var y_: int = 0
+	
+	if result && result.strings.size() == 3:
+		x_ = int(result.get_string(1))
+		y_ = int(result.get_string(2))
+	else:
+		print_debug("[Warning] Some error with RegEx in Point.InitString() method: " + string)
+	
+	return InitInt(x_, y_)
+
 
 func ToVector2() -> Vector2:
 	return Vector2(x, y)
