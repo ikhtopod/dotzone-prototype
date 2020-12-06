@@ -56,6 +56,8 @@ func _exit_tree():
 	
 	c_InstantiateDots = null
 	c_Generate = null
+	
+	GameManager.Reset()
 
 
 func SpawnDots() -> void:
@@ -92,6 +94,7 @@ func InstantiateDots_Coroutine() -> void:
 		if point:
 			var dotScene = DotScene.instance().Init(point)
 			dotScene.name = "Dot_%05d_%05d" % [blockNodeCounter, counter]
+			GameManager.AssignMinMaxCoordinatesOfSides(dotScene.position)
 			blockNode.add_child(dotScene)
 			counter += 1
 		

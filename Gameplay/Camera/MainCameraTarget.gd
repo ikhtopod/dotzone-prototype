@@ -16,6 +16,10 @@ func RelativePositionOffset(touch: TouchManager.TouchEventStat) -> void:
 	position -= touch.Relative().Get()
 
 
+func LockPosition() -> void:
+	position = GameManager.NormalizePositionBySides(position)
+
+
 func _ready():
 	var result := TouchManager.connect("drag", self, "_on_MainCameraTarget_drag")
 	if result != OK:
@@ -29,4 +33,5 @@ func _on_MainCameraTarget_drag(index: int, touch: TouchManager.TouchEventStat) -
 		return
 	
 	RelativePositionOffset(touch)
+	LockPosition()
 	emit_signal("moved")
