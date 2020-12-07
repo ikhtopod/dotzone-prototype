@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Maps/Intro.gd" type="Script" id=1]
+[ext_resource path="res://Icon/Android/icon192x192.png" type="Texture" id=2]
+
+[node name="Intro" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.75
+one_shot = true
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.06, 0.039, 0.04005, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/CenterContainer"]
+margin_left = 84.0
+margin_top = 224.0
+margin_right = 276.0
+margin_bottom = 416.0
+texture = ExtResource( 2 )
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

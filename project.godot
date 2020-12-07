@@ -33,7 +33,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Dot Zone"
-run/main_scene="res://Maps/MainMenu.tscn"
+run/main_scene="res://Maps/Intro.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="dotzone"
 config/icon="res://Icon/icon.png"
@@ -45,6 +45,7 @@ config/quit_on_go_back=false
 GameManager="*res://Library/Singleton/GameManager.gd"
 PlayerManager="*res://Library/Singleton/PlayerManager.gd"
 TouchManager="*res://Library/Singleton/TouchManager.gd"
+SceneManager="*res://Library/Singleton/SceneManager.gd"
 
 [display]
 
