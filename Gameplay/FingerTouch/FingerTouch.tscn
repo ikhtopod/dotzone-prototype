@@ -4,11 +4,13 @@
 [ext_resource path="res://Gameplay/FingerTouch/FingerTouch.gd" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 20.0
+radius = 22.0
 
 [node name="FingerTouch" type="Area2D" groups=[
 "FingerTouch",
 ]]
+collision_layer = 0
+collision_mask = 2
 script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

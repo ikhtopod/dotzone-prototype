@@ -59,6 +59,13 @@ window/stretch/aspect="keep_width"
 
 pointing/emulate_touch_from_mouse=true
 
+[layer_names]
+
+2d_physics/layer_1="main"
+2d_physics/layer_2="dot"
+2d_physics/layer_3="finger_touch"
+2d_physics/layer_4="neighbour_touch"
+
 [locale]
 
 translations=PoolStringArray( "res://Translation/l18n.en.translation", "res://Translation/l18n.ru.translation" )

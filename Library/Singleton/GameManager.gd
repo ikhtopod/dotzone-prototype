@@ -13,7 +13,7 @@ const DISTANCE_BETWEEN_POINTS: float = 72.0
 ### Tags ###
 const PLAYER_TAG: String = "Player"
 const ENEMY_TAG: String = "Enemy"
-
+const FINGER_TOUCH_TAG: String = "FingerTouch"
 
 ###################
 enum EGameplayPhase {
