@@ -1,6 +1,12 @@
 extends Node2D
 
 
+const DefaultTextureResource = preload("res://Sprite/Dot/default.png")
+const SelectedTextureResource = preload("res://Sprite/Dot/selected.png")
+const LinkedTextureResource = preload("res://Sprite/Dot/linked.png")
+const LinkedSelectedTextureResource = preload("res://Sprite/Dot/linked_selected.png")
+
+
 var m_point: Point = Point.new()
 var m_noise: float = 0.0 setget SetNoise, GetNoise
 var m_strength: float = 1.0 setget ,GetStrength
@@ -38,7 +44,13 @@ func SetColorByNoise() -> void:
 
 
 func _on_Area2D_area_entered(area: Area2D):
-	if not area.is_in_group(GameManager.FINGER_TOUCH_TAG):
-		return
-	
-	print_debug(m_noise)
+	if area.is_in_group(GameManager.FINGER_TOUCH_TAG):
+		GameManager.SetSelectedObject(self)
+
+# Функции, реализуемые объектом, который можно выделять #
+func Select() -> void:
+	$Sprite.texture = SelectedTextureResource
+
+func Deselect() -> void:
+	$Sprite.texture = DefaultTextureResource
+#########################################################

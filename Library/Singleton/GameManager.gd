@@ -15,6 +15,43 @@ const PLAYER_TAG: String = "Player"
 const ENEMY_TAG: String = "Enemy"
 const FINGER_TOUCH_TAG: String = "FingerTouch"
 
+
+### Selection ###
+
+# Сигналы для функционала, который должен возникать, если произошло
+# выделение и\или развыделение объекта
+signal select(object)
+signal deselect(object)
+
+var selectedObject = null setget SetSelectedObject, GetSelectedObject
+
+# Объект, который можно выделить, должен реализовать у себя
+# функции Select() и Deselect()
+func SetSelectedObject(newObject) -> void:
+	if newObject == selectedObject:
+		return
+	
+	if newObject:
+		if selectedObject:
+			selectedObject.Deselect()
+			emit_signal("deselect", selectedObject)
+		
+		selectedObject = newObject
+		selectedObject.Select()
+		emit_signal("select", selectedObject)
+	else:
+		if selectedObject:
+			selectedObject.Deselect()
+			emit_signal("deselect", selectedObject)
+			selectedObject = null
+
+func GetSelectedObject():
+	return selectedObject
+
+func ResetSelectedObject() -> void:
+	SetSelectedObject(null)
+
+
 ###################
 enum EGameplayPhase {
 	UNKNOWN,
