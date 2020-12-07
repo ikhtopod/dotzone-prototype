@@ -3,23 +3,40 @@ extends Node2D
 
 const DotScene: PackedScene = preload("res://Gameplay/Dot/Dot.tscn")
 
-
+### Generator ###
 var m_fieldCreator: FieldCreator = null
 
 # Генерация объектов Dot
 var m_timerGenerator: Timer = null
 var c_InstantiateDots: GDScriptFunctionState = null
 var c_Generate: GDScriptFunctionState = null
+#################
+
+var m_noise: OpenSimplexNoise = null
 
 
 func _ready():
 	GameManager.currenGameplayPhase = GameManager.EGameplayPhase.GENERATE
 	
+	InitNoise()
+	InitFieldCreator()
+	InitTimerGenerator()
+
+func InitNoise() -> void:
+	randomize()
+	
+	m_noise = OpenSimplexNoise.new()
+	m_noise.seed = randi()
+	m_noise.octaves = 1
+	m_noise.period = 5.0
+	m_noise.persistence = 0.4
+	m_noise.lacunarity = 2.0
+
+
+func InitFieldCreator() -> void:
 	m_fieldCreator = FieldCreator.new()
 	c_Generate = m_fieldCreator.GenerateCoroutine()
 	c_InstantiateDots = InstantiateDots_Coroutine()
-	
-	InitTimerGenerator()
 
 
 func InitTimerGenerator() -> void:
@@ -92,7 +109,7 @@ func InstantiateDots_Coroutine() -> void:
 		
 		var point: Point = m_fieldCreator.GetLastAddedPoint()
 		if point:
-			var dotScene = DotScene.instance().Init(point)
+			var dotScene = DotScene.instance().Init(point, m_noise.get_noise_2dv(point.ToVector2()))
 			dotScene.name = "Dot_%05d_%05d" % [blockNodeCounter, counter]
 			GameManager.AssignMinMaxCoordinatesOfSides(dotScene.position)
 			blockNode.add_child(dotScene)

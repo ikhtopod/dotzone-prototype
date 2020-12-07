@@ -1,19 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Maps/Game.gd" type="Script" id=1]
 [ext_resource path="res://Gameplay/Battlefield/Battlefield.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Gameplay/Camera/CameraManager.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Font/RobotoMono-Medium.ttf" type="DynamicFontData" id=5]
-
-[sub_resource type="OpenSimplexNoise" id=1]
-seed = 230784
-octaves = 1
-period = 128.0
-
-[sub_resource type="NoiseTexture" id=2]
-flags = 23
-seamless = true
-noise = SubResource( 1 )
 
 [sub_resource type="DynamicFont" id=3]
 size = 32
@@ -28,12 +18,6 @@ script = ExtResource( 1 )
 [node name="CameraManager" parent="." instance=ExtResource( 3 )]
 
 [node name="Battlefield" parent="." instance=ExtResource( 2 )]
-
-[node name="Node2DTest" type="Node2D" parent="."]
-
-[node name="SpriteNoise" type="Sprite" parent="Node2DTest"]
-position = Vector2( 2000, 2000 )
-texture = SubResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

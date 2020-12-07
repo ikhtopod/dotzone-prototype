@@ -3,8 +3,8 @@ extends Resource
 class_name FieldCreator
 
 
-const BASE: int = 2
-const POWER: int = 5
+const BASE: int = 3
+const POWER: int = 4
 var MIN_SPINE: int = pow(BASE, POWER)
 var MIN_FIELD: int = MIN_SPINE * POWER
 
@@ -45,7 +45,7 @@ func GenerateCoroutine() -> void:
 	m_spineLastKey = Point.new().ToString()
 	m_spine[m_spineLastKey] = Point.new()
 	
-	while m_spine.size() < MIN_SPINE and m_field.size() < MIN_FIELD:
+	while m_field.size() < MIN_FIELD:
 		AddNextRandomPoint()
 		
 		for x in range(-2, 3):
