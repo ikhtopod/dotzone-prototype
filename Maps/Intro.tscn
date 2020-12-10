@@ -7,7 +7,7 @@
 script = ExtResource( 1 )
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 1.75
+wait_time = 1.25
 one_shot = true
 autostart = true
 
@@ -29,9 +29,9 @@ __meta__ = {
 }
 
 [node name="TextureRect" type="TextureRect" parent="CanvasLayer/CenterContainer"]
-margin_left = 84.0
-margin_top = 224.0
-margin_right = 276.0
-margin_bottom = 416.0
+margin_left = 64.0
+margin_top = 188.0
+margin_right = 256.0
+margin_bottom = 380.0
 texture = ExtResource( 2 )
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

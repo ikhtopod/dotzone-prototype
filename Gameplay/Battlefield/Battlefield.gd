@@ -61,7 +61,7 @@ func StopTimerGenerator() -> void:
 # Чем больше объектов, тем через дольшее время будет создан следующий.
 func IncreaseTimerGeneratorTime() -> void:
 	var countObjects: float = float(m_fieldCreator.GetField().size())
-	var newWaitTime: float = 0.01 * (countObjects / 150.0)
+	var newWaitTime: float = 0.01 * (countObjects / 100.0)
 	
 	if newWaitTime > m_timerGenerator.wait_time:
 		m_timerGenerator.wait_time = newWaitTime

@@ -6,11 +6,11 @@ const SelectedTextureResource = preload("res://Sprite/Dot/selected.png")
 const LinkedTextureResource = preload("res://Sprite/Dot/linked.png")
 const LinkedSelectedTextureResource = preload("res://Sprite/Dot/linked_selected.png")
 
-
 var m_point: Point = Point.new()
 var m_noise: float = 0.0 setget SetNoise, GetNoise
 var m_strength: float = 1.0 setget ,GetStrength
 var m_color: Color = Color.darkseagreen
+var m_owner: Owner = null
 
 
 func Init(point: Point, noise: float):

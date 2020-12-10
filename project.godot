@@ -20,6 +20,16 @@ _global_script_classes=[ {
 "path": "res://Library/Collection/LinkedList.gd"
 }, {
 "base": "Reference",
+"class": "Owner",
+"language": "GDScript",
+"path": "res://Gameplay/Owner/Owner.gd"
+}, {
+"base": "Owner",
+"class": "OwnerPlayer",
+"language": "GDScript",
+"path": "res://Gameplay/Owner/OwnerPlayer.gd"
+}, {
+"base": "Reference",
 "class": "Point",
 "language": "GDScript",
 "path": "res://Library/Point.gd"
@@ -27,6 +37,8 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "FieldCreator": "",
 "LinkedList": "",
+"Owner": "",
+"OwnerPlayer": "",
 "Point": ""
 }
 
