@@ -13,6 +13,10 @@ var m_color: Color = Color.darkseagreen
 var m_owner: Owner = null
 
 
+func _enter_tree():
+	$AudioStreamPlayer2D.stream = AudioManager.GetRandomSoundDotCreation()
+
+
 func Init(point: Point, noise: float):
 	m_point = Point.new().InitPoint(point)
 	position = m_point.ToVector2() * GameManager.DISTANCE_BETWEEN_POINTS
@@ -87,3 +91,7 @@ func Select() -> void:
 func Deselect() -> void:
 	RemoveSpriteSelection()
 #########################################################
+
+
+func _on_AudioStreamPlayer2D_finished():
+	$AudioStreamPlayer2D.queue_free()

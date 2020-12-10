@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/pop_02.wav-a3a1680b36ad7602c0f32bfa1c603467.sample"
+
+[deps]
+
+source_file="res://Audio/Sound/pop_02.wav"
+dest_files=[ "res://.import/pop_02.wav-a3a1680b36ad7602c0f32bfa1c603467.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

@@ -58,6 +58,7 @@ GameManager="*res://Library/Singleton/GameManager.gd"
 PlayerManager="*res://Library/Singleton/PlayerManager.gd"
 TouchManager="*res://Library/Singleton/TouchManager.gd"
 SceneManager="*res://Library/Singleton/SceneManager.gd"
+AudioManager="*res://Library/Singleton/AudioManager.gd"
 
 [display]
 
