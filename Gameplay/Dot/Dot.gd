@@ -2,7 +2,7 @@ extends Node2D
 
 
 const DefaultTextureResource = preload("res://Sprite/Dot/default.png")
-const LinkedSelectedTextureResource = preload("res://Sprite/Dot/linked_selected.png")
+const LinkedTextureResource = preload("res://Sprite/Dot/linked.png")
 const SelectionBorderTextureResource = preload("res://Sprite/Dot/selection_border.png")
 
 
@@ -72,10 +72,10 @@ func FingerTouchReaction() -> void:
 		else:
 			# pari
 			m_owner = OwnerPlayer.new()
-			$Sprite.texture = LinkedSelectedTextureResource
+			$Sprite.texture = LinkedTextureResource
 	else:
 		m_owner = OwnerPlayer.new()
-		$Sprite.texture = LinkedSelectedTextureResource
+		$Sprite.texture = LinkedTextureResource
 	
 	GameManager.SetSelectedObject(self)
 
