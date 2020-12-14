@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node2D",
+"class": "Dot",
+"language": "GDScript",
+"path": "res://Gameplay/Dot/Dot.gd"
+}, {
 "base": "Resource",
 "class": "FieldCreator",
 "language": "GDScript",
@@ -35,6 +40,7 @@ _global_script_classes=[ {
 "path": "res://Library/Point.gd"
 } ]
 _global_script_class_icons={
+"Dot": "",
 "FieldCreator": "",
 "LinkedList": "",
 "Owner": "",
@@ -77,7 +83,7 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_1="main"
 2d_physics/layer_2="dot"
 2d_physics/layer_3="finger_touch"
-2d_physics/layer_4="neighbour_touch"
+2d_physics/layer_4="neighbour_finder"
 
 [locale]
 
